@@ -77,3 +77,18 @@ O Pages é público e depende da configuração inicial com origem “GitHub Act
 3. Verificar navegação, instalação PWA e atualização offline em navegadores WasmGC compatíveis.
 4. Remover a entrada em rascunho duplicada de `v0.1.0`.
 5. Concluir revisão de escopo, validar e pilotar tarefas/rubrica, congelar plano de análise, registrar determinação ética e executar o estudo antes de preparar artigo de resultados.
+
+
+## Reescopo do artefato MVP
+
+O protótipo histórico v0.1.0 era estático; o MVP em desenvolvimento implementa diário local de gastos e reflexão opcional, sem função clínica. Após CI verde e revisão dos autores, publicar uma nova versão SemVer cujo tag coincida com pubspec.yaml. ZIP de Pages deve corresponder ao build aprovado.
+
+O diário cifra conteúdo localmente, mas a implementação ainda não passou por auditoria criptográfica independente e shared_preferences documenta persistência best effort. A exportação JSON é texto sem cifra. Não incluir registros reais ou exportações em release/artifacts.
+
+| Gate | Evidência | Limite |
+|---|---|---|
+| Cofre | Testes de cifra, senha errada e ausência de plaintext | Não substitui auditoria |
+| MVP | CRUD, reflexão opcional, resumo descritivo, exportação e exclusão | Não valida uso clínico |
+| Plataforma | CI Web/Wasm e APK mais teste manual | Não declarar paridade sem evidência |
+| Dados | Tratamento local documentado, sem rede | Não equivale a conformidade LGPD |
+| Pesquisa | Tarefas sintéticas e protocolo separado | Não usar entradas de usuários |

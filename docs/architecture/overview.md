@@ -1,39 +1,35 @@
-# Arquitetura inicial
+# Arquitetura do MVP
 
-## Contexto
-A primeira versão é Flutter/Dart, com um app único para Web/WasmGC e Android. O build de demonstração não contém persistência nem comunicação de rede; os exemplos estão codificados como texto fictício.
+## Visão
 
-## Diagrama
-
-```mermaid
-flowchart LR
-  Person["Pessoa usuária"]
-  UI["Flutter UI"]
-  Demo["Conteúdo fictício local"]
-  Person --> UI
-  UI --> Demo
-```
-
-Não existe backend, banco, telemetry, autenticação, modelo, agente, conexão com profissional ou ferramenta externa no protótipo.
-
-## Arquitetura futura, sujeita a revisão
-Se pesquisa posterior justificar IA, manter cliente Flutter separado de serviço intermediário, com autenticação, autorização, validação de finalidade e orquestração restrita. O modelo não deve acessar dados diretamente nem operar ferramentas: um adaptador explícito aplica allowlist, valida entrada e saída, registra metadados mínimos e requer aprovação da pessoa antes de exportar/compartilhar.
+Aplicação Flutter client-side para Web/Wasm e Android. GitHub Pages entrega arquivos estáticos; não recebe os registros do diário.
 
 ```mermaid
 flowchart TD
-  Client["Flutter: Web WasmGC / Android"]
-  Consent["Consentimento e controles"]
-  Gateway["Gateway de domínio restrito"]
-  Agent["Agente sem autonomia clínica"]
-  Review["Revisão explícita da pessoa"]
-  Client --> Consent
-  Consent --> Gateway
-  Gateway --> Agent
-  Agent --> Review
-  Review --> Client
+  Person["Pessoa"] --> UI["Flutter: Web/Wasm ou Android"]
+  UI --> Domain["Gastos e reflexões"]
+  Domain --> Vault["PBKDF2 + AES-256-GCM"]
+  Vault --> Local["Armazenamento local cifrado"]
+  UI --> Summary["Totais descritivos"]
+  Summary --> Person
 ```
 
-## Restrições de plataforma
-- Web: testar build WasmGC nos navegadores realmente suportados; manter fallback JavaScript somente se necessário e documentar diferenças.
-- Android: definir minSdk e permissões somente quando uma função real exigir; solicitar nenhuma permissão no demo.
-- Não assumir paridade perfeita entre armazenamento, acessibilidade ou rede nas duas plataformas.
+## Modelo de domínio
+
+`ExpenseEntry` guarda id, valor em centavos, data, categoria, situação planejada e texto opcional. Estado emocional, motivação e reflexão são campos livres autodeclarados; o sistema não os infere.
+
+Os resumos somam registros e agrupam pelo estado escrito pela pessoa. São descrições do diário individual, não evidência de correlação populacional ou causalidade.
+
+## Cofre e persistência
+
+- PBKDF2-HMAC-SHA256, 600.000 iterações e salt aleatório de 16 bytes derivam a chave da senha.
+- AES-256-GCM cifra o JSON com nonce aleatório novo de 12 bytes por gravação.
+- Preferência local guarda somente versão, algoritmo, KDF, salt, nonce, texto cifrado e tag.
+- Senha não é persistida; senha esquecida significa perda de acesso.
+- Exportação é feita só após ação explícita e resulta em JSON legível.
+- Sem backend, telemetria, IA, sincronização ou integração financeira.
+- shared_preferences suporta Web/Android, mas descreve a persistência como melhor esforço; exportação serve como cópia manual.
+
+## Limites
+
+A cifra não protege de dispositivo desbloqueado, malware, extensão, navegador ou origem comprometida; código não auditado independentemente. Dados locais podem ser removidos pelo navegador ou pela desinstalação. Isso não representa validação clínica ou conformidade legal.

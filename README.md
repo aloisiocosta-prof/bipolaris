@@ -1,32 +1,27 @@
-# Bipolaris — projeto acadêmico de engenharia de software e agentes de IA
+# Bipolaris — diário financeiro reflexivo
 
-**Objetivo:** planejar, conduzir, documentar e apresentar pesquisa sobre requisitos de segurança em agentes de codificação com IA, usando tarefas sintéticas.
+Bipolaris é um MVP Flutter para a pessoa registrar gastos e, se desejar, descrever o próprio estado emocional, a motivação da compra e uma reflexão pessoal. O aplicativo apresenta totais e agrupamentos descritivos dos registros; não infere estados mentais, causalidade, diagnóstico ou tratamento.
 
-O protótipo Flutter Web/WasmGC e Android é um artefato acadêmico. Usa conteúdo fictício, não coleta dados, não se conecta a agentes e não realiza funções clínicas. A pesquisa não avalia eficácia terapêutica, diagnóstico ou resposta a crises. Ver [fontes e limites](docs/references.md).
+## Funcionalidades
 
-## Artefatos de pesquisa
+- Criar e desbloquear diário protegido por senha.
+- Registrar valor em reais, categoria, data, situação planejada/não planejada e descrição opcional.
+- Acrescentar estado autodescrito, motivação e reflexão em campos opcionais.
+- Consultar, editar e apagar registros.
+- Ver total registrado e somas descritivas por estado autodeclarado.
+- Copiar exportação JSON em texto legível, apagar todos os registros e bloquear o diário.
 
-- [Protocolo de pesquisa](docs/research/protocol.md)
-- [Protocolo de revisão de escopo](docs/research/literature-review-protocol.md)
-- [Tarefas sintéticas](docs/research/benchmark-scenarios.md)
-- [Rubrica de avaliação](docs/research/rubric.md)
-- [Skill de implementação segura](.agents/skills/bipolaris-safe-implementation/SKILL.md)
-- [Manuscrito ABNT/LaTeX](paper/main.tex)
-- [Fonte LaTeX do banner WIP](presentation/poster.tex)
-- [Plano de release e publicação](docs/publication/release-plan.md)
+## Privacidade e limites
 
-## Artigos, banner e aplicação compilada
+O conteúdo é cifrado no cliente com AES-256-GCM e chave derivada da senha por PBKDF2-HMAC-SHA256, e salvo localmente no navegador ou dispositivo. A senha não é armazenada nem pode ser recuperada. O app não tem backend, conta, sincronização, telemetria, publicidade, conexão bancária ou integração de IA.
 
-A release SemVer anexará três arquivos: PDF do manuscrito de protocolo, PDF do banner marcado como trabalho em andamento e ZIP contendo exatamente a build Flutter Web/PWA destinada ao caminho GitHub Pages. Releases incluem metadados de compilação e checksums SHA-256. Enquanto não houver estudo executado, os PDFs não apresentam resultados empíricos.
+A exportação JSON é **texto sem cifra**; armazene-a em local privado. A persistência local é melhor esforço: limpar os dados do navegador ou desinstalar o app pode apagar registros. A cifra não protege um dispositivo desbloqueado, malware, extensão maliciosa ou página comprometida, e ainda não passou por auditoria criptográfica independente.
 
-- [Releases](https://github.com/aloisiocosta-prof/bipolaris/releases)
-- [Site esperado no GitHub Pages](https://aloisiocosta-prof.github.io/bipolaris/)
+Este MVP não foi validado clinicamente, não declara conformidade LGPD e não é dispositivo médico. A LGPD define dados de saúde como sensíveis; qualquer uso institucional ou pesquisa com participantes exige avaliação de privacidade, segurança, base legal, informação aos titulares e determinação ética aplicável. Não versionar dados de usuários, mesmo cifrados, no repositório, CI, issues, capturas de tela ou releases.
 
-Para iniciar uma versão depois de integrar à `main`, crie uma branch `release/vMAJOR.MINOR.PATCH` cujo número coincida com `version:` em `pubspec.yaml`. A automação só publicará depois de testes, builds e validação dos PDFs. O manifesto/PWA ZIP usa o caminho `/bipolaris/`; outro host requer rebuild com base path próprio.
+## Executar
 
-## Executar localmente
-
-Com Flutter 3.47.5:
+Com Flutter 3.47.5 e Dart 3.9 ou superior:
 
 ```sh
 flutter create . --platforms web,android --project-name bipolaris
@@ -37,10 +32,23 @@ flutter test
 flutter build apk --debug
 ```
 
+O build Web usa Flutter WebAssembly e publica a PWA em `/bipolaris/`; Android é compilado pela CI. GitHub Pages hospeda a interface estática e não recebe os registros.
+
 ## CI/CD
 
-GitHub Actions verifica formatação, análise, teste de widget, builds Web/Wasm e Android, compila os dois PDFs, implanta Pages a partir de `main` e cria releases versionadas com ZIP/PDFs após branch `release/vX.Y.Z`. A primeira publicação Pages exige origem “GitHub Actions” em Settings → Pages. Consulte o [plano de publicação](docs/publication/release-plan.md) e o histórico de [Actions](https://github.com/aloisiocosta-prof/bipolaris/actions).
+GitHub Actions executa formatação, análise, testes de modelo/cofre/interface, builds Web/PWA e APK e compilação dos documentos acadêmicos. Pages publica `build/web` após alterações do app na `main`. Releases usam SemVer, PDFs, ZIP do build e checksums.
 
-## Estado científico
+## Estado acadêmico
 
-Há protocolo proposto e protótipo inicial; a revisão não está concluída, o experimento não foi executado e não existem resultados, submissão ou aceitação. Não inserir dados de pacientes, informações reais de saúde, credenciais ou material identificável neste repositório público.
+O protocolo atual propõe estudar instruções de segurança para agentes de codificação usando tarefas sintéticas. O diário é o artefato em desenvolvimento; isso não constitui pesquisa com pacientes nem teste de eficácia clínica. Não há resultados clínicos ou validação com participantes.
+
+## Referências
+
+- Brasil. Lei nº 13.709/2018 (LGPD), texto compilado: https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm
+- Astill Wright L, Moore M, Reeves S, Vallejos EP, Morriss R. Coproduction and safety of a bipolar mood-tracking app. *JMIR Formative Research*. 2025;9:e65140. doi:10.2196/65140.
+- Michalak EE, et al. Self-monitoring with the PolarUs app: impacts and unmet needs. *Journal of Affective Disorders*. 2025;383:374–384. doi:10.1016/j.jad.2025.04.107.
+- ANPD. Guia orientativo de segurança da informação para agentes de pequeno porte, atualizado em 2025: https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte
+- Flutter Wasm: https://docs.flutter.dev/platform-integration/web/wasm
+- GitHub Pages: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages
+- Dart cryptography: https://pub.dev/packages/cryptography
+- Flutter shared_preferences: https://pub.dev/packages/shared_preferences

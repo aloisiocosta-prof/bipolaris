@@ -46,7 +46,7 @@ def main() -> None:
         "id": base_path,
         "name": "Bipolaris",
         "short_name": "Bipolaris",
-        "description": "Protótipo acadêmico demonstrativo com conteúdo fictício.",
+        "description": "Diário local de gastos e reflexão pessoal, sem sincronização ou função clínica.",
         "start_url": base_path,
         "scope": base_path,
         "display": "standalone",

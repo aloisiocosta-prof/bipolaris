@@ -1,20 +1,26 @@
 import 'package:bipolaris/main.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bipolaris/services/expense_vault.dart';
+import 'support/memory_string_store.dart';
 
 void main() {
-  testWidgets('shows synthetic-data and non-clinical scope notices', (
+  testWidgets('offers to create a private expense reflection journal', (
     tester,
   ) async {
-    await tester.pumpWidget(const BipolarisApp());
+    await tester.pumpWidget(
+      BipolarisApp(vault: ExpenseVault(storage: MemoryStringStore())),
+    );
+    await tester.pumpAndSettle();
 
-    expect(
-      find.textContaining('todos os exemplos são fictícios'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('não oferece diagnóstico'), findsOneWidget);
-    expect(
-      find.textContaining('Nenhum agente de IA está conectado.'),
-      findsOneWidget,
-    );
+    expect(find.text('Bipolaris'), findsOneWidget);
+    expect(find.text('Crie seu diário protegido'), findsOneWidget);
+    expect(find.textContaining('não são enviados'), findsOneWidget);
+
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Criar diário protegido'), findsOneWidget);
+    expect(find.textContaining('não faz diagnóstico'), findsOneWidget);
   });
 }

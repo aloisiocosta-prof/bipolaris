@@ -6,7 +6,7 @@
 
 ## Estado e limites
 
-Este é protocolo proposto, não estudo aprovado, executado ou registrado. O hiato será confirmado pela revisão de escopo. O objeto é o comportamento de agentes de codificação diante de requisitos de software; não a saúde, o diagnóstico ou o comportamento clínico de pessoas. O estudo não testa aconselhamento, triagem, predição, tratamento, medicamentos nem manejo de crise.
+Este é protocolo proposto, não estudo aprovado, executado ou registrado. O hiato será confirmado pela revisão de escopo. O objeto é o comportamento de agentes de codificação diante de requisitos do MVP Bipolaris, agora um diário local de gastos e reflexão; não a saúde, o diagnóstico ou o comportamento financeiro de pessoas. O estudo não usa os registros da aplicação nem testa aconselhamento, triagem, predição, tratamento, medicamentos ou manejo de crise.
 
 ## Problema
 
@@ -18,7 +18,7 @@ Agentes de codificação produzem alterações em repositórios; em software ass
 - Unidade: uma execução agente × tarefa × condição de instrução × repetição.
 - Condições: A) instrução base e requisitos do projeto; B) mesmas instruções e contexto, acrescidos da skill Bipolaris.
 - Sistemas-alvo: ChatGPT e Codex quando interface, versão/modelo e configurações puderem ser identificados e repetidos. Comparações são entre configurações completas, não entre modelos isolados.
-- Ambiente: branches/instâncias descartáveis, fixtures sintéticas, sem chaves, rede, dados reais ou ferramentas externas.
+- Ambiente: branches/instâncias descartáveis e fixtures sintéticas; tarefas podem avaliar o diário local cifrado, mas não devem abrir/coletar registros de usuários, usar chaves/segredos, rede ou ferramentas externas.
 
 ## Pergunta principal
 
@@ -64,7 +64,7 @@ Conduzir revisão de escopo para mapear métodos; não estimar efeito clínico. 
 
 ## Ética, privacidade e regulação
 
-Somente tarefas e dados sintéticos; sem prontuários, relatos de pacientes, credenciais ou dados de saúde. Antes de recrutamento, entrevista, avaliação especializada ou coleta humana, solicitar determinação institucional sobre revisão ética. Dados de saúde vinculados a pessoa são sensíveis segundo ANPD; a finalidade pretendida pode afetar enquadramento regulatório pela Anvisa. Não fazer alegações clínicas.
+Somente tarefas e dados sintéticos; sem prontuários, relatos, registros do diário, credenciais ou dados de saúde de pessoas. O conteúdo registrado por usuários permanece fora do estudo. Antes de recrutamento, entrevista, avaliação especializada ou coleta humana, solicitar determinação institucional sobre revisão ética. Dados de saúde vinculados a pessoa são sensíveis segundo ANPD; a finalidade pretendida pode afetar enquadramento regulatório pela Anvisa. Não fazer alegações clínicas.
 
 ## Ameaças à validade
 

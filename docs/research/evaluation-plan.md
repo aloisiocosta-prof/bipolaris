@@ -1,14 +1,14 @@
 # Plano de avaliação
 
-Ver [protocolo acadêmico atualizado](protocol.md). Este plano é uma lista de execução, não evidência coletada.
+Este checklist é planejamento, não evidência coletada. O protocolo avalia agentes de codificação em tarefas sintéticas, não usuários, registros do diário ou resultados de saúde.
 
-- [ ] executar e documentar a revisão de escopo;
-- [ ] validar tarefas sintéticas e rubrica;
+- [ ] concluir revisão de escopo e documentar busca;
+- [ ] validar tarefas sintéticas e rubrica, incluindo funções permitidas/proibidas do diário;
 - [ ] registrar decisão ética/governança institucional;
-- [ ] pilotar, revisar e congelar protocolo;
-- [ ] executar comparações em instâncias isoladas;
-- [ ] executar testes e dupla revisão de patches;
-- [ ] analisar dados e ameaças à validade;
-- [ ] atualizar artigo e banner somente com achados observados.
+- [ ] pilotar e congelar protocolo;
+- [ ] executar agentes em instâncias isoladas;
+- [ ] testar software e revisar patches com avaliadores;
+- [ ] analisar resultados e ameaças à validade;
+- [ ] atualizar artigo/banner apenas com achados observados.
 
-Não coletar dados de pacientes nem avaliar eficácia clínica.
+Não coletar nem analisar registros locais de usuários; não alegar eficácia ou validação clínica.
