@@ -19,6 +19,7 @@ jobs:
           flutter-version: "3.47.5"
           cache: true
       - run: flutter --version
+      - run: flutter create . --platforms web,android --project-name bipolaris
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter pub get
       - run: flutter analyze
