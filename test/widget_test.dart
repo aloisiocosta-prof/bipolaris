@@ -13,6 +13,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Bipolaris'), findsOneWidget);
+    expect(find.text('Crie seu diário protegido'), findsOneWidget);
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pumpAndSettle();
     expect(find.text('Criar diário protegido'), findsOneWidget);
     expect(find.textContaining('não são enviados'), findsOneWidget);
     expect(find.textContaining('não faz diagnóstico'), findsOneWidget);
