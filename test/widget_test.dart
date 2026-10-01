@@ -15,7 +15,7 @@ void main() {
 
     expect(find.text('Bipolaris'), findsOneWidget);
     expect(find.text('Criar diário protegido'), findsOneWidget);
-    expect(find.textContaining('somente neste dispositivo'), findsOneWidget);
-    expect(find.textContaining('sem diagnóstico'), findsOneWidget);
+    expect(find.textContaining('não são enviados'), findsOneWidget);
+    expect(find.textContaining('não faz diagnóstico'), findsOneWidget);
   });
 }
