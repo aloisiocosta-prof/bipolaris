@@ -13,19 +13,19 @@ class BipolarisApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Bipolaris — diário financeiro reflexivo',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF365A8C),
-            brightness: Brightness.light,
-          ),
-          useMaterial3: true,
-          inputDecorationTheme: const InputDecorationTheme(
-            border: OutlineInputBorder(),
-          ),
-        ),
-        home: const VaultGate(),
-      );
+    title: 'Bipolaris — diário financeiro reflexivo',
+    theme: ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF365A8C),
+        brightness: Brightness.light,
+      ),
+      useMaterial3: true,
+      inputDecorationTheme: const InputDecorationTheme(
+        border: OutlineInputBorder(),
+      ),
+    ),
+    home: const VaultGate(),
+  );
 }
 
 class VaultGate extends StatefulWidget {
@@ -182,7 +182,9 @@ class _VaultGateState extends State<VaultGate> {
                 TextField(
                   controller: _confirmation,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: 'Repita a senha'),
+                  decoration: const InputDecoration(
+                    labelText: 'Repita a senha',
+                  ),
                   onSubmitted: (_) => _submit(),
                 ),
               ],
@@ -202,7 +204,9 @@ class _VaultGateState extends State<VaultGate> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.lock_open),
-                label: Text(creating ? 'Criar diário protegido' : 'Desbloquear'),
+                label: Text(
+                  creating ? 'Criar diário protegido' : 'Desbloquear',
+                ),
               ),
               const SizedBox(height: 16),
               const Text(
@@ -251,7 +255,8 @@ class _JournalPageState extends State<JournalPage> {
       await widget.session.save(next);
       if (!mounted) return;
       setState(() {
-        _entries = [...next]..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
+        _entries = [...next]
+          ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
         _saving = false;
       });
     } catch (_) {
@@ -280,7 +285,8 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<void> _deleteEntry(ExpenseEntry entry) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: const Text('Apagar este registro?'),
@@ -306,7 +312,8 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<void> _deleteAll() async {
-    final confirmed = await showDialog<bool>(
+    final confirmed =
+        await showDialog<bool>(
           context: context,
           builder: (dialogContext) => AlertDialog(
             title: const Text('Apagar todos os registros?'),
@@ -376,7 +383,10 @@ class _JournalPageState extends State<JournalPage> {
 
   @override
   Widget build(BuildContext context) {
-    final total = _entries.fold<int>(0, (sum, entry) => sum + entry.amountCents);
+    final total = _entries.fold<int>(
+      0,
+      (sum, entry) => sum + entry.amountCents,
+    );
     final groups = <String, List<ExpenseEntry>>{};
     for (final entry in _entries) {
       final state = entry.selfReportedState?.trim();
@@ -500,7 +510,10 @@ class _JournalPageState extends State<JournalPage> {
                 }),
               ],
               const SizedBox(height: 20),
-              Text('Seus gastos', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'Seus gastos',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               if (_saving)
                 const LinearProgressIndicator()
               else if (_entries.isEmpty)
@@ -587,18 +600,18 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title),
-              const SizedBox(height: 4),
-              Text(value, style: Theme.of(context).textTheme.titleLarge),
-            ],
-          ),
-        ),
-      );
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title),
+          const SizedBox(height: 4),
+          Text(value, style: Theme.of(context).textTheme.titleLarge),
+        ],
+      ),
+    ),
+  );
 }
 
 class _ExpenseForm extends StatefulWidget {
@@ -628,7 +641,9 @@ class _ExpenseFormState extends State<_ExpenseForm> {
     _amount = TextEditingController(
       text: existing == null
           ? ''
-          : (existing.amountCents / 100).toStringAsFixed(2).replaceAll('.', ','),
+          : (existing.amountCents / 100)
+                .toStringAsFixed(2)
+                .replaceAll('.', ','),
     );
     _category = TextEditingController(text: existing?.category ?? '');
     _description = TextEditingController(text: existing?.description ?? '');
@@ -716,8 +731,8 @@ class _ExpenseFormState extends State<_ExpenseForm> {
                 ),
                 validator: (value) =>
                     ExpenseEntry.parseMoneyToCents(value ?? '') == null
-                        ? 'Informe um valor maior que zero.'
-                        : null,
+                    ? 'Informe um valor maior que zero.'
+                    : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
