@@ -8,7 +8,7 @@ import '../models/expense_entry.dart';
 
 class ExpenseVault {
   ExpenseVault({SharedPreferencesAsync? preferences})
-      : _preferences = preferences ?? SharedPreferencesAsync();
+    : _preferences = preferences ?? SharedPreferencesAsync();
 
   static const _storageKey = 'bipolaris.expense-vault.v1';
   static const _envelopeVersion = 1;
@@ -17,7 +17,8 @@ class ExpenseVault {
 
   final SharedPreferencesAsync _preferences;
 
-  Future<bool> exists() async => await _preferences.getString(_storageKey) != null;
+  Future<bool> exists() async =>
+      await _preferences.getString(_storageKey) != null;
 
   Future<ExpenseVaultSession> create(String passphrase) async {
     final salt = _randomBytes(16);
@@ -47,13 +48,19 @@ class ExpenseVault {
       );
       final plaintext = await _cipher.decrypt(secretBox, secretKey: key);
       final decoded = jsonDecode(utf8.decode(plaintext)) as List<dynamic>;
-      final entries = decoded
-          .map((value) => ExpenseEntry.fromJson(
-                Map<String, Object?>.from(value as Map),
-              ))
-          .toList()
-        ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
-      return VaultContents(ExpenseVaultSession._(_preferences, salt, key), entries);
+      final entries =
+          decoded
+              .map(
+                (value) => ExpenseEntry.fromJson(
+                  Map<String, Object?>.from(value as Map),
+                ),
+              )
+              .toList()
+            ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
+      return VaultContents(
+        ExpenseVaultSession._(_preferences, salt, key),
+        entries,
+      );
     } on VaultUnlockException {
       rethrow;
     } catch (_) {
@@ -66,10 +73,7 @@ class ExpenseVault {
         macAlgorithm: Hmac.sha256(),
         iterations: _iterations,
         bits: 256,
-      ).deriveKey(
-        secretKey: SecretKey(utf8.encode(passphrase)),
-        nonce: salt,
-      );
+      ).deriveKey(secretKey: SecretKey(utf8.encode(passphrase)), nonce: salt);
 
   static List<int> _randomBytes(int length) {
     final random = Random.secure();
