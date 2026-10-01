@@ -1,7 +1,7 @@
 # Plano de documentação, publicação e apresentação — Bipolaris
 
 **Versão do plano:** 0.1  
-**Estado em 2026-10-01:** pipeline submetido à CI; artigo-protocolo e banner permanecem trabalhos em andamento, sem resultados empíricos.
+**Estado em 2026-10-01:** release v0.1.0 publicada; deploy Pages pendente da habilitação inicial do recurso; artigo-protocolo e banner continuam WIP, sem resultados empíricos.
 
 ## Decisão editorial
 
@@ -11,10 +11,10 @@ A versão inicial é um **protocolo/proposta de pesquisa e artefato de software*
 
 Para cada versão SemVer aprovada, compilar e anexar à Release do GitHub:
 
-1. `bipolaris-article-vX.Y.Z.pdf`: manuscrito de protocolo em LaTeX/abnTeX2.
-2. `bipolaris-poster-banner-vX.Y.Z.pdf`: banner científico horizontal provisório, marcado WIP.
-3. `bipolaris-web-pages-vX.Y.Z.zip`: conteúdo integral de `build/web`, compilado Flutter WebAssembly GC com manifest PWA, service worker e base path do GitHub Pages.
-4. `BUILD-INFO.txt` e `SHA256SUMS.txt`: proveniência e checksums da compilação.
+1. \`bipolaris-article-vX.Y.Z.pdf\`: manuscrito de protocolo em LaTeX/abnTeX2.
+2. \`bipolaris-poster-banner-vX.Y.Z.pdf\`: banner científico horizontal provisório, marcado WIP.
+3. \`bipolaris-web-pages-vX.Y.Z.zip\`: conteúdo integral de \`build/web\`, compilado Flutter WebAssembly GC com manifest PWA, service worker e base path do GitHub Pages.
+4. \`BUILD-INFO.txt\` e \`SHA256SUMS.txt\`: proveniência e checksums da compilação.
 
 Git tags identificam o commit da release, e os arquivos ficam anexados à versão para download, em vez de depender somente da retenção temporária de artefatos Actions [GitHub Docs, 2026a; GitHub Docs, 2026b].
 
@@ -24,18 +24,18 @@ Git tags identificam o commit da release, e os arquivos ficam anexados à versã
 |---|---|---|---|
 | 0. Integridade científica | Confirmar protocolo, pergunta, medidas, limites clínicos e estado WIP | Protocolo, fontes e rubrica versionados | Nenhum dado, métrica ou resultado inventado |
 | 1. Build acadêmico | Compilar artigo e banner com TeX Live/abnTeX2 | PDFs de prova | Build sem erro; banner de uma página; referências resolvidas |
-| 2. Flutter Web/PWA | Format/analyze/test, build WasmGC, base path, manifest, ícones e SW | `build/web` validado e ZIP | URLs sob `/bipolaris/`; manifesto e cache verificados |
+| 2. Flutter Web/PWA | Format/analyze/test, build WasmGC, base path, manifest, ícones e SW | \`build/web\` validado e ZIP | URLs sob \`/bipolaris/\`; manifesto e cache verificados |
 | 3. CI do PR | Executar jobs Flutter e acadêmico | Logs e artefatos Actions | Todos os jobs verdes antes de integrar |
-| 4. GitHub Pages | Implantar `build/web` da `main` com Pages Actions | URL pública e deployment | HTTPS, caminho do projeto, WasmGC, instalação e navegação verificados |
-| 5. Release SemVer | Criar branch `release/vX.Y.Z`; validar versão; compilar; publicar | Tag, Release, PDFs, ZIP, build info, hashes | Commit, versão, arquivos e SHA-256 conferidos |
+| 4. GitHub Pages | Implantar \`build/web\` da \`main\` com Pages Actions | URL pública e deployment | HTTPS, caminho do projeto, WasmGC, instalação e navegação verificados |
+| 5. Release SemVer | Criar branch \`release/vX.Y.Z\`; validar versão; compilar; publicar | Tag, Release, PDFs, ZIP, build info, hashes | Commit, versão, arquivos e SHA-256 conferidos |
 | 6. Publicação científica | Revisar, pilotar, congelar protocolo, obter decisão ética e executar estudo | Análise reproduzível e manuscrito atualizado | Conclusões limitadas aos dados, com requisitos éticos resolvidos |
 
 ## Estratégia de versão
 
-- Usar `MAJOR.MINOR.PATCH` em tags `vMAJOR.MINOR.PATCH`.
-- `0.y.z` identifica protótipos de pesquisa sem alegação de produto clínico; PATCH para correções, MINOR para artefatos ou protocolo compatíveis, MAJOR após estabilidade formal do contrato de publicação.
-- A tag precisa coincidir com `version:` em `pubspec.yaml`; a action interrompe em caso de divergência.
-- Criar branch explícita `release/vX.Y.Z` a partir do commit integrado após CI verde. A automação compila primeiro, cria release em rascunho com todos os arquivos e a publica após validações.
+- Usar \`MAJOR.MINOR.PATCH\` em tags \`vMAJOR.MINOR.PATCH\`.
+- \`0.y.z\` identifica protótipos de pesquisa sem alegação de produto clínico; PATCH para correções, MINOR para artefatos ou protocolo compatíveis, MAJOR após estabilidade formal do contrato de publicação.
+- A tag precisa coincidir com \`version:\` em \`pubspec.yaml\`; a action interrompe em caso de divergência.
+- Criar branch explícita \`release/vX.Y.Z\` a partir do commit integrado após CI verde. A automação compila primeiro, cria release em rascunho com todos os arquivos e a publica após validações.
 - Não reescrever tag publicada; corrigir por nova versão. SHA-256 ajuda a detectar alterações acidentais.
 
 ## LaTeX e revisão editorial
@@ -46,11 +46,11 @@ A CI compila os arquivos, confirma os PDFs e conta páginas. Revisão humana pr�
 
 ## Flutter Web, WasmGC, PWA e Pages
 
-Pages e o ZIP vêm do mesmo comando `./tool/build_web.sh`, com `--wasm --base-href /bipolaris/`. O script ajusta escopo/URLs do manifesto, registra service worker e armazena em cache respostas same-origin visitadas. O Flutter não gera service worker por padrão; portanto, offline e instalação exigem configuração/testes próprios [Flutter Docs, 2026].
+Pages e o ZIP vêm do mesmo comando \`./tool/build_web.sh\`, com \`--wasm --base-href /bipolaris/\`. O script ajusta escopo/URLs do manifesto, registra service worker e armazena em cache respostas same-origin visitadas. O Flutter não gera service worker por padrão; portanto, offline e instalação exigem configuração/testes próprios [Flutter Docs, 2026].
 
-Testar navegador compatível com WasmGC, instalação, primeira carga, recarga offline depois que recursos foram visitados, atualização de versão e navegação. O cache offline se limita ao app/recursos já acessados; não há backend nem sincronização. O ZIP está preparado para o caminho `/bipolaris/`; outro host/base exige rebuild.
+Testar navegador compatível com WasmGC, instalação, primeira carga, recarga offline depois que recursos foram visitados, atualização de versão e navegação. O cache offline se limita ao app/recursos já acessados; não há backend nem sincronização. O ZIP está preparado para o caminho \`/bipolaris/\`; outro host/base exige rebuild.
 
-O Pages é público e depende da configuração inicial com origem “GitHub Actions” nas Settings do repositório; depois, o workflow implanta o artefato [GitHub Docs, 2026c]. URL esperada: `https://aloisiocosta-prof.github.io/bipolaris/`.
+O Pages é público e depende da configuração inicial com origem “GitHub Actions” nas Settings do repositório; depois, o workflow implanta o artefato [GitHub Docs, 2026c]. URL esperada: \`https://aloisiocosta-prof.github.io/bipolaris/\`.
 
 ## Skills e conexões
 
@@ -62,10 +62,18 @@ O Pages é público e depende da configuração inicial com origem “GitHub Act
 - **computing-academic-poster:** preservar o estágio WIP e adequar às regras do evento.
 - **SciSpace/Consensus/Scite:** usar na revisão futura se houver conexão; verificar resultados no artigo/DOI e registrar busca/data.
 
+## Registro da execução v0.1.0
+
+- PR #2 integrado na \`main\` após CI verde; Flutter format/analyze/test, build Web/PWA Wasm, APK de debug, artigo ABNT e banner passaram.
+- Release \`v0.1.0\` inclui artigo PDF, banner PDF, ZIP de \`build/web\`, \`BUILD-INFO.txt\` e \`SHA256SUMS.txt\`. Os checksums dos arquivos foram recalculados e conferidos após baixar o artefato de Actions.
+- Inspeção visual do PDF de banner confirmou uma página horizontal de 120 × 70 cm; dimensões, afiliação e conteúdo ainda exigem adequação ao edital e confirmação dos autores.
+- O build Pages concluiu e empacotou a PWA, mas o job de deployment retornou 404 porque Pages ainda não está habilitado no repositório. É necessário selecionar Settings → Pages → Build and deployment → Source: GitHub Actions e rerodar o job de deployment.
+- A criação da branch de release acionou os eventos \`create\` e \`push\` e produziu uma entrada adicional em rascunho para \`v0.1.0\`; o workflow na \`main\` foi ajustado para disparar apenas em \`push\` para evitar duplicação em próximas versões. Remover o rascunho duplicado requer ação no GitHub Releases.
+
 ## Próximas decisões dos autores
 
 1. Confirmar autores e afiliação institucional.
 2. Escolher evento e fornecer chamada/template/dimensões do banner.
-3. Confirmar publicação pública do site e dos PDFs.
-4. Configurar Settings → Pages → Build and deployment → Source: GitHub Actions caso a implantação não consiga habilitar o Pages.
-5. Depois do merge e do CI verde, criar `release/v0.1.0` e revisar arquivos/hashes antes de divulgar.
+3. Habilitar Pages em Settings → Pages → Build and deployment → Source: GitHub Actions e solicitar rerun do job.
+4. Remover a entrada em rascunho duplicada de \`v0.1.0\`.
+5. Concluir revisão de escopo, validar e pilotar tarefas/rubrica, congelar plano de análise, registrar determinação ética e executar o estudo antes de preparar artigo de resultados.
