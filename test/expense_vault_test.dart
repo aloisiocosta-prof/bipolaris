@@ -1,20 +1,14 @@
 import 'package:bipolaris/models/expense_entry.dart';
 import 'package:bipolaris/services/expense_vault.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'support/memory_string_store.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-  });
-
   test(
     'encrypts records at rest and unlocks them with the passphrase',
     () async {
-      final preferences = SharedPreferencesAsync();
-      final vault = ExpenseVault(preferences: preferences);
+      final storage = MemoryStringStore();
+      final vault = ExpenseVault(storage: storage);
       final session = await vault.create('long-passphrase-123');
       await session.save([
         ExpenseEntry(
@@ -29,7 +23,7 @@ void main() {
         ),
       ]);
 
-      final stored = await preferences.getString('bipolaris.expense-vault.v1');
+      final stored = await storage.getString('bipolaris.expense-vault.v1');
       expect(stored, isNot(contains('Exemplo pessoal privado')));
       expect(stored, contains('AES-256-GCM'));
 
@@ -40,7 +34,7 @@ void main() {
   );
 
   test('rejects an incorrect passphrase without exposing entry text', () async {
-    final vault = ExpenseVault(preferences: SharedPreferencesAsync());
+    final vault = ExpenseVault(storage: MemoryStringStore());
     final session = await vault.create('long-passphrase-123');
     await session.save([
       ExpenseEntry(
