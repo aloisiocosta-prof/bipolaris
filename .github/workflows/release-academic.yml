@@ -1,6 +1,9 @@
 name: Build versioned academic release
 
 on:
+  create:
+    branches:
+      - "release/v*"
   push:
     branches:
       - "release/v*"
