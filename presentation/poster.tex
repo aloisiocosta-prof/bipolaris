@@ -1,8 +1,8 @@
 \documentclass[final]{beamer}
-\usepackage[orientation=landscape,size=custom,width=120,height=90,scale=1.15]{beamerposter}
+\usepackage[orientation=landscape,size=custom,width=120,height=90,scale=1.45]{beamerposter}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[brazil]{babel}
+\usepackage[brazilian]{babel}
 \usepackage{microtype}
 \usepackage{booktabs}
 \usepackage{url}
@@ -12,6 +12,8 @@
 \setbeamercolor{headline}{fg=white,bg=blue!55!black}
 \setbeamercolor{block title}{fg=white,bg=blue!55!black}
 \setbeamercolor{block body}{fg=black,bg=blue!3}
+\setbeamerfont{block title}{size=\Large}
+\setbeamerfont{block body}{size=\large}
 
 \title{Instruções de segurança para agentes de codificação com IA em software de saúde mental}
 \author{Aloisio Costa}
@@ -20,6 +22,15 @@
 
 \begin{document}
 \begin{frame}[t]
+\begin{block}{}
+\centering
+{\Huge\bfseries \inserttitle\par}
+\vspace{0.45em}
+{\Large \insertauthor \quad|\quad \insertinstitute\par}
+\vspace{0.25em}
+{\large \insertdate\par}
+\end{block}
+\vspace{0.7em}
 \begin{columns}[t,totalwidth=\linewidth]
 \begin{column}{.31\linewidth}
 \begin{block}{Problema e pergunta}
@@ -63,15 +74,7 @@ Dois revisores humanos avaliarão patches e logs. Relatar concordância, incerte
 \begin{block}{Etapas de pesquisa}
 \centering
 \large
-Revisão de escopo
-\quad $\rightarrow$ \quad
-Piloto
-\quad $\rightarrow$ \quad
-Protocolo congelado
-\quad $\rightarrow$ \quad
-Experimento
-\quad $\rightarrow$ \quad
-Análise e relato
+Revisão de escopo \quad $\rightarrow$ \quad Piloto \quad $\rightarrow$ \quad Protocolo congelado \quad $\rightarrow$ \quad Experimento \quad $\rightarrow$ \quad Análise e relato
 \end{block}
 \end{column}
 
