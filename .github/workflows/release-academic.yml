@@ -14,11 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: \${{ github.sha }}
+          ref: ${{ github.sha }}
       - name: Resolve and validate SemVer release
         id: version
         env:
-          REF_NAME: \${{ github.ref_name }}
+          REF_NAME: ${{ github.ref_name }}
         run: |
           python3 - <<'PY'
           import os, re
@@ -54,16 +54,16 @@ jobs:
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
       - name: Prepare versioned release assets
         env:
-          TAG: \${{ steps.version.outputs.tag }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
           set -euo pipefail
           command -v pdfinfo >/dev/null || (sudo apt-get update && sudo apt-get install -y poppler-utils)
           mkdir -p release-assets
-          cp paper/main.pdf "release-assets/bipolaris-article-\${TAG}.pdf"
-          cp presentation/poster.pdf "release-assets/bipolaris-poster-banner-\${TAG}.pdf"
-          (cd build/web && zip -qr "\${GITHUB_WORKSPACE}/release-assets/bipolaris-web-pages-\${TAG}.zip" .)
-          pdfinfo "release-assets/bipolaris-article-\${TAG}.pdf"
-          pdfinfo "release-assets/bipolaris-poster-banner-\${TAG}.pdf"
+          cp paper/main.pdf "release-assets/bipolaris-article-${TAG}.pdf"
+          cp presentation/poster.pdf "release-assets/bipolaris-poster-banner-${TAG}.pdf"
+          (cd build/web && zip -qr "${GITHUB_WORKSPACE}/release-assets/bipolaris-web-pages-${TAG}.zip" .)
+          pdfinfo "release-assets/bipolaris-article-${TAG}.pdf"
+          pdfinfo "release-assets/bipolaris-poster-banner-${TAG}.pdf"
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -74,25 +74,25 @@ jobs:
           assert Path("build/web/index.html").is_file()
           PY
           {
-            echo "Version: \${TAG}"
-            echo "Source commit: \${GITHUB_SHA}"
+            echo "Version: ${TAG}"
+            echo "Source commit: ${GITHUB_SHA}"
             echo "Web target: Flutter WebAssembly GC, hosted at /bipolaris/"
             echo "Research status: proposed protocol; no empirical results"
             echo "Generated (UTC): $(date -u +%FT%TZ)"
           } > release-assets/BUILD-INFO.txt
-          (cd release-assets && sha256sum bipolaris-article-\${TAG}.pdf bipolaris-poster-banner-\${TAG}.pdf bipolaris-web-pages-\${TAG}.zip BUILD-INFO.txt > SHA256SUMS.txt)
+          (cd release-assets && sha256sum bipolaris-article-${TAG}.pdf bipolaris-poster-banner-${TAG}.pdf bipolaris-web-pages-${TAG}.zip BUILD-INFO.txt > SHA256SUMS.txt)
       - name: Preserve build outputs
         uses: actions/upload-artifact@v7
         with:
-          name: bipolaris-release-\${{ steps.version.outputs.tag }}
+          name: bipolaris-release-${{ steps.version.outputs.tag }}
           path: release-assets/
           retention-days: 90
       - name: Create draft release and publish assets
         env:
-          GH_TOKEN: \${{ github.token }}
-          TAG: \${{ steps.version.outputs.tag }}
-          COMMIT: \${{ github.sha }}
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          COMMIT: ${{ github.sha }}
         run: |
           set -euo pipefail
-          gh release create "\${TAG}" release-assets/* --draft --target "\${COMMIT}" --title "Bipolaris \${TAG}" --notes "Protocolo acadêmico e artefatos do protótipo. O artigo e o banner descrevem uma proposta de pesquisa em andamento; não apresentam resultados empíricos, aprovação ética ou validação clínica. O ZIP contém a build Flutter Web/WasmGC com PWA para o caminho /bipolaris/."
-          gh release edit "\${TAG}" --draft=false --latest
+          gh release create "${TAG}" release-assets/* --draft --target "${COMMIT}" --title "Bipolaris ${TAG}" --notes "Protocolo acadêmico e artefatos do protótipo. O artigo e o banner descrevem uma proposta de pesquisa em andamento; não apresentam resultados empíricos, aprovação ética ou validação clínica. O ZIP contém a build Flutter Web/WasmGC com PWA para o caminho /bipolaris/."
+          gh release edit "${TAG}" --draft=false --latest
