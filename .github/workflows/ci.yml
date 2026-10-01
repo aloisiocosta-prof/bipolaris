@@ -45,6 +45,8 @@ jobs:
             presentation/poster.tex
           work_in_root_file_dir: true
           args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+      - name: Install PDF inspection utility
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Validate PDF outputs
         run: |
           test -s paper/main.pdf
