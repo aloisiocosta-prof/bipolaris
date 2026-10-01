@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cryptography/cryptography.dart';
-import 'package:shared_storage/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/expense_entry.dart';
 
@@ -17,19 +17,18 @@ class ExpenseVault {
 
   final StringStore _storage;
 
-  Future<bool> exists() async =>
-      await _preferences.getString(_storageKey) != null;
+  Future<bool> exists() async => await _storage.getString(_storageKey) != null;
 
   Future<ExpenseVaultSession> create(String passphrase) async {
     final salt = _randomBytes(16);
     final key = await _deriveKey(passphrase, salt);
-    final session = ExpenseVaultSession._(_preferences, salt, key);
+    final session = ExpenseVaultSession._(_storage, salt, key);
     await session.save(const []);
     return session;
   }
 
   Future<VaultContents> unlock(String passphrase) async {
-    final encoded = await _preferences.getString(_storageKey);
+    final encoded = await _storage.getString(_storageKey);
     if (encoded == null) throw const VaultUnlockException();
     try {
       final envelope = jsonDecode(encoded) as Map<String, dynamic>;
@@ -58,7 +57,7 @@ class ExpenseVault {
               .toList()
             ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
       return VaultContents(
-        ExpenseVaultSession._(_preferences, salt, key),
+        ExpenseVaultSession._(_storage, salt, key),
         entries,
       );
     } on VaultUnlockException {
@@ -89,9 +88,9 @@ class VaultContents {
 }
 
 class ExpenseVaultSession {
-  ExpenseVaultSession._(this._preferences, this._salt, this._key);
+  ExpenseVaultSession._(this._storage, this._salt, this._key);
 
-  final SharedPreferencesAsync _preferences;
+  final StringStore _storage;
   final List<int> _salt;
   final SecretKey _key;
 
@@ -115,10 +114,10 @@ class ExpenseVaultSession {
       'cipherText': base64Encode(box.cipherText),
       'mac': base64Encode(box.mac.bytes),
     });
-    await _preferences.setString(ExpenseVault._storageKey, envelope);
+    await _storage.setString(ExpenseVault._storageKey, envelope);
   }
 
-  Future<void> destroy() => _preferences.remove(ExpenseVault._storageKey);
+  Future<void> destroy() => _storage.remove(ExpenseVault._storageKey);
 }
 
 abstract interface class StringStore {
