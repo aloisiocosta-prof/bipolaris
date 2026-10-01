@@ -1,20 +1,21 @@
 import 'package:bipolaris/main.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('shows synthetic-data and non-clinical scope notices', (
-    tester,
-  ) async {
-    await tester.pumpWidget(const BipolarisApp());
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-    expect(
-      find.textContaining('todos os exemplos são fictícios'),
-      findsOneWidget,
-    );
-    expect(find.textContaining('não oferece diagnóstico'), findsOneWidget);
-    expect(
-      find.textContaining('Nenhum agente de IA está conectado.'),
-      findsOneWidget,
-    );
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+  });
+
+  testWidgets('offers to create a private expense reflection journal', (tester) async {
+    await tester.pumpWidget(const BipolarisApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Bipolaris'), findsOneWidget);
+    expect(find.text('Criar diário protegido'), findsOneWidget);
+    expect(find.textContaining('somente neste dispositivo'), findsOneWidget);
+    expect(find.textContaining('sem diagnóstico'), findsOneWidget);
   });
 }

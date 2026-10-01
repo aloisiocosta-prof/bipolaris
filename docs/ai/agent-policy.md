@@ -1,7 +1,7 @@
 # Política para agentes de IA
 
 ## Estado atual
-Nenhum agente ou modelo está integrado ao protótipo. Esta política é um requisito de projeto para qualquer integração futura, não uma alegação de segurança validada.
+Nenhum agente ou modelo está integrado ao MVP. O app guarda autorrelatos locais cifrados; esta política não autoriza agente a ler, extrair, compartilhar ou enviar esses dados. É um requisito de projeto, não uma alegação de segurança validada.
 
 ## Princípio de uso
 O agente poderá, após aprovação, ajudar a organizar texto escrito voluntariamente pela pessoa para preparar uma conversa. A pessoa revisa e decide qualquer uso do conteúdo. O agente não recebe autoridade clínica ou operacional.

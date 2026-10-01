@@ -1,14 +1,16 @@
 name: bipolaris
-description: "Protótipo acadêmico demonstrativo com dados fictícios."
+description: "Diário local de gastos e reflexão pessoal."
 publish_to: none
-version: 0.1.0
+version: 0.2.0
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.9.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  cryptography: ^2.9.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_lints: ^6.0.0

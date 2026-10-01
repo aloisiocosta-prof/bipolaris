@@ -1,22 +1,25 @@
-# Modelo inicial de ameaças
+# Modelo de ameaças do diário Bipolaris
 
-## Ativos a proteger se dados reais forem introduzidos
-Texto pessoal, saúde mental, identidade, credenciais, consentimentos, conteúdo compartilhado, metadados e chaves. Dados de saúde são sensíveis e requerem finalidade, base legal e controles específicos.
+## Ativos
 
-## Atores e ameaças
-- Pessoa curiosa abre a demonstração e insere dados reais apesar do aviso.
-- Extensão, script de terceiros, dependência ou cadeia de build tenta exfiltrar conteúdo.
-- Prompt injection em texto citado tenta mudar política ou extrair dados.
-- Provedor de modelo registra ou reutiliza conteúdo inesperadamente.
-- Conta compartilhada, dispositivo perdido, backup ou exportação expõe material.
-- Agente alucina, rotula sentimento como diagnóstico ou produz orientação clínica indevida.
-- Saída generativa ou treinamento amplifica vieses de linguagem/experiência.
+Gastos, estados emocionais autodescritos, motivações, reflexões, senha e exportações. Informações de saúde são dados pessoais sensíveis conforme LGPD, art. 5º, II.
 
-## Controles no protótipo
-Sem campos de entrada, armazenamento, rede, modelos, métricas ou segredos. Usar apenas fixtures sintéticas. CI com permissões mínimas de leitura.
+## Ameaças e controles
 
-## Controles necessários antes de persistência/IA
-Inventário e fluxo de dados, avaliação de impacto à proteção de dados, threat modeling atualizado, gestão de segredos, criptografia, autorização, retenção e eliminação testáveis, segurança de dependências, resposta a incidentes, auditoria e teste de backup/exportação.
+| Ameaça | Controle atual | Risco residual |
+|---|---|---|
+| Leitura casual do armazenamento | Envelope cifrado AES-256-GCM; chave PBKDF2; senha não persistida | Senha fraca e implementação ainda sem auditoria independente |
+| Senha esquecida | Aviso explícito e exportação manual | Sem recuperação, perda permanente |
+| Exposição na exportação | Aviso de JSON sem cifra antes de copiar | Clipboard ou destino podem expor conteúdo |
+| Dispositivo compartilhado/desbloqueado | Tela inicial exige senha; ação de bloquear | Malware, captura de tela e observação |
+| Dados enviados ao servidor/CI | Sem backend; fixtures sintéticas; sem conteúdo nos logs | Origem web comprometida pode ler dados desbloqueados |
+| Perda de dados | Aviso e exportação manual | Armazenamento do navegador é best effort; limpar site/desinstalar pode apagar dados |
+| Resumo interpretado como diagnóstico | Texto descritivo e sem inferência automática | Usuário pode inferir demais; linguagem precisa continuar clara |
 
-## Gate
-Não colocar dados reais ou de participantes neste repositório público. Qualquer coleta acadêmica exige protocolo aprovado, consentimento e regras de armazenamento/compartilhamento autorizadas. Fazer revisão jurídica/regulatória e de segurança antes de produção.
+## Antes de uso institucional
+
+Revisão criptográfica independente, atualização do threat model, inventário e avaliação do tratamento, plano de retenção/exclusão/incidentes, verificação de navegadores e Android e avaliação de acessibilidade. Pesquisa com participantes requer determinação ética e governança antes da coleta.
+
+## Limites
+
+Não declarar conformidade LGPD, eficácia, segurança clínica ou status de dispositivo médico. Não inserir registros de usuários em repositório, issues, CI, capturas de tela ou releases. Não adicionar rede, analytics, IA ou compartilhamento sem reavaliação explícita de arquitetura e governança.
