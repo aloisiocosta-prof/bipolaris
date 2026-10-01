@@ -66,7 +66,8 @@ class PrototypeHomePage extends StatelessWidget {
               const SizedBox(height: 12),
               const _ExampleNote(
                 heading: 'Controle da pessoa',
-                body: 'A pessoa decide o que escrever, revisar, exportar ou apagar.',
+                body:
+                    'A pessoa decide o que escrever, revisar, exportar ou apagar.',
               ),
               const SizedBox(height: 24),
               OutlinedButton.icon(

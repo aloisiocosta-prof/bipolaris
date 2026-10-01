@@ -1,53 +1,53 @@
-\\documentclass[article,12pt,oneside,a4paper,brazil]{abntex2}
-\\usepackage[T1]{fontenc}
-\\usepackage[utf8]{inputenc}
-\\usepackage{microtype}
-\\usepackage{hyperref}
+\documentclass[article,12pt,oneside,a4paper,brazil]{abntex2}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{hyperref}
 
-\\titulo{Instruções de segurança para agentes de codificação com IA em software de saúde mental}
-\\autor{Aloisio Costa}
-\\local{Teresina, Brasil}
-\\data{2026}
+\titulo{Instruções de segurança para agentes de codificação com IA em software de saúde mental}
+\autor{Aloisio Costa}
+\local{Teresina, Brasil}
+\data{2026}
 
-\\begin{document}
-\\maketitle
+\begin{document}
+\maketitle
 
-\\begin{resumo}
+\begin{resumo}
 Este manuscrito é um protocolo proposto de Engenharia de Software Empírica. O estudo avaliará se uma skill específica do repositório altera a conformidade de agentes de codificação com requisitos de escopo não clínico e privacidade em tarefas sintéticas no protótipo Bipolaris. O desenho prevê comparação entre instruções base e instruções com a skill, usando configurações versionadas de ChatGPT e Codex, tarefas inventadas, testes automatizados e revisão de patches. Nenhum agente está integrado ao app, nenhum dado de paciente será usado e não existem resultados empíricos neste documento. O objetivo é avaliar comportamento de engenharia de agentes, não eficácia clínica.
-\\end{resumo}
+\end{resumo}
 
-\\textbf{Palavras-chave}: agentes de codificação; engenharia de software empírica; IA generativa; privacidade; saúde digital.
+\textbf{Palavras-chave}: agentes de codificação; engenharia de software empírica; IA generativa; privacidade; saúde digital.
 
-\\textual
-\\section{Introdução}
-Agentes generativos podem alterar código, documentação e testes a partir de instruções em repositórios. Em projetos associados à saúde, uma alteração funcionalmente correta ainda pode violar privacidade, finalidade ou limites de uso. A OMS recomenda governança e avaliação apropriadas ao contexto para IA em saúde \\cite{who2024ethics}; o perfil NIST organiza riscos de IA generativa ao longo de concepção, desenvolvimento e avaliação \\cite{nist2024genai}.
+\textual
+\section{Introdução}
+Agentes generativos podem alterar código, documentação e testes a partir de instruções em repositórios. Em projetos associados à saúde, uma alteração funcionalmente correta ainda pode violar privacidade, finalidade ou limites de uso. A OMS recomenda governança e avaliação apropriadas ao contexto para IA em saúde \cite{who2024ethics}; o perfil NIST organiza riscos de IA generativa ao longo de concepção, desenvolvimento e avaliação \cite{nist2024genai}.
 
-Estudos recentes avaliam agentes conversacionais e benchmarks de respostas em saúde mental \\cite{feng2025agents,badawi2026mentalbench}. Este projeto propõe estudar questão distinta: como instruções de segurança versionadas afetam alterações de software produzidas por agentes de codificação. O hiato é provisório até concluir a revisão de escopo.
+Estudos recentes avaliam agentes conversacionais e benchmarks de respostas em saúde mental \cite{feng2025agents,badawi2026mentalbench}. Este projeto propõe estudar questão distinta: como instruções de segurança versionadas afetam alterações de software produzidas por agentes de codificação. O hiato é provisório até concluir a revisão de escopo.
 
-\\section{Problema e pergunta}
+\section{Problema e pergunta}
 O problema é a ausência, ainda a confirmar, de evidência específica sobre conformidade de agentes de codificação com requisitos de segurança e privacidade ao alterar um protótipo de saúde mental. O objeto é o patch gerado por uma configuração de agente em tarefa sintética.
 
-\\textbf{RQ1}: Como uma skill de segurança altera a proporção de execuções sem violação crítica?
-\\textbf{RQ2}: Qual seu efeito sobre sucesso funcional, recusa excessiva e escalonamento de ambiguidade?
+\textbf{RQ1}: Como uma skill de segurança altera a proporção de execuções sem violação crítica?
+\textbf{RQ2}: Qual seu efeito sobre sucesso funcional, recusa excessiva e escalonamento de ambiguidade?
 
-\\section{Objetivos}
+\section{Objetivos}
 O objetivo principal é estimar o efeito de instruções explícitas sobre a conformidade dos agentes. Objetivos secundários: mapear literatura; construir e pilotar tarefas; operacionalizar rubrica; executar comparação controlada; analisar limitações; publicar artefatos reproduzíveis permitidos.
 
-\\section{Método}
+\section{Método}
 Propõe-se experimento pareado com duas condições: instruções base e base acrescida da skill. Sistemas planejados são ChatGPT e Codex como configurações completas; registrar modelo, interface, data, ferramentas, parâmetros, permissões, prompts e commit. O banco inicial prevê oito tarefas sintéticas, quatro categorias e três repetições por célula (até 96 execuções); tamanho final será justificado após piloto e congelado antes da coleta confirmatória.
 
-O desfecho primário é a proporção de execuções com violação crítica definida a priori. Desfechos secundários: critérios funcionais, testes, severidade, recusa excessiva e variação entre repetições. Revisores humanos avaliarão patches; outro LLM não será ground truth. Reportar proporções, diferenças pareadas, intervalos de confiança, concordância e ameaças à validade conforme os padrões ACM SIGSOFT \\cite{ralph2020empirical}.
+O desfecho primário é a proporção de execuções com violação crítica definida a priori. Desfechos secundários: critérios funcionais, testes, severidade, recusa excessiva e variação entre repetições. Revisores humanos avaliarão patches; outro LLM não será ground truth. Reportar proporções, diferenças pareadas, intervalos de confiança, concordância e ameaças à validade conforme os padrões ACM SIGSOFT \cite{ralph2020empirical}.
 
-\\section{Revisão de literatura}
-Conduzir revisão de escopo para mapear métodos. Relatar conforme PRISMA-ScR; esta extensão é diretriz de relato, não método de revisão \\cite{tricco2018prismascr}. Publicar strings, fontes, critérios e datas.
+\section{Revisão de literatura}
+Conduzir revisão de escopo para mapear métodos. Relatar conforme PRISMA-ScR; esta extensão é diretriz de relato, não método de revisão \cite{tricco2018prismascr}. Publicar strings, fontes, critérios e datas.
 
-\\section{Ética e limites}
-Usar prompts, arquivos e dados sintéticos; sem prontuários, participantes ou dados de saúde. Antes de qualquer atividade com pessoas, solicitar determinação institucional sobre revisão ética. Dados de saúde são pessoais sensíveis segundo ANPD \\cite{anpd2026faq}. Finalidade pretendida pode afetar enquadramento de software perante Anvisa \\cite{anvisa2022samd}. Não reivindicar finalidade médica, eficácia ou segurança clínica.
+\section{Ética e limites}
+Usar prompts, arquivos e dados sintéticos; sem prontuários, participantes ou dados de saúde. Antes de qualquer atividade com pessoas, solicitar determinação institucional sobre revisão ética. Dados de saúde são pessoais sensíveis segundo ANPD \cite{anpd2026faq}. Finalidade pretendida pode afetar enquadramento de software perante Anvisa \cite{anvisa2022samd}. Não reivindicar finalidade médica, eficácia ou segurança clínica.
 
-\\section{Estado e próximos passos}
+\section{Estado e próximos passos}
 Este texto é esqueleto de protocolo, não artigo com resultados. Próximos passos: concluir revisão; validar rubrica; pilotar tarefas; congelar configurações/análise; documentar decisão ética; executar experimento; selecionar veículo; atualizar artigo e banner somente com resultados observados.
 
-\\postextual
-\\bibliographystyle{abntex2-alf}
-\\bibliography{references}
-\\end{document}
+\postextual
+\bibliographystyle{abntex2-alf}
+\bibliography{references}
+\end{document}
