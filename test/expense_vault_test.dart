@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bipolaris/models/expense_entry.dart';
 import 'package:bipolaris/services/expense_vault.dart';
 import 'package:flutter_test/flutter_test.dart';
