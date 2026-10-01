@@ -9,7 +9,9 @@ import 'services/expense_vault.dart';
 void main() => runApp(const BipolarisApp());
 
 class BipolarisApp extends StatelessWidget {
-  const BipolarisApp({super.key});
+  const BipolarisApp({super.key, this.vault});
+
+  final ExpenseVault? vault;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -24,19 +26,21 @@ class BipolarisApp extends StatelessWidget {
         border: OutlineInputBorder(),
       ),
     ),
-    home: const VaultGate(),
+    home: VaultGate(vault: vault),
   );
 }
 
 class VaultGate extends StatefulWidget {
-  const VaultGate({super.key});
+  const VaultGate({super.key, this.vault});
+
+  final ExpenseVault? vault;
 
   @override
   State<VaultGate> createState() => _VaultGateState();
 }
 
 class _VaultGateState extends State<VaultGate> {
-  final _vault = ExpenseVault();
+  late final ExpenseVault _vault;
   final _passphrase = TextEditingController();
   final _confirmation = TextEditingController();
   bool? _hasVault;
@@ -48,6 +52,7 @@ class _VaultGateState extends State<VaultGate> {
   @override
   void initState() {
     super.initState();
+    _vault = widget.vault ?? ExpenseVault();
     _checkVault();
   }
 
@@ -65,7 +70,7 @@ class _VaultGateState extends State<VaultGate> {
     } catch (_) {
       if (mounted) {
         setState(() {
-          _hasVault = false;
+          _hasVault = null;
           _error = 'Não foi possível acessar o armazenamento local.';
         });
       }
@@ -194,6 +199,12 @@ class _VaultGateState extends State<VaultGate> {
                   _error!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
+                if (_hasVault == null)
+                  TextButton.icon(
+                    onPressed: _checkVault,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Tentar novamente'),
+                  ),
               ],
               const SizedBox(height: 20),
               FilledButton.icon(
