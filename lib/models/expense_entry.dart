@@ -24,16 +24,16 @@ class ExpenseEntry {
   final String? reflection;
 
   Map<String, Object?> toJson() => {
-        'id': id,
-        'amountCents': amountCents,
-        'purchasedAt': purchasedAt.toIso8601String(),
-        'category': category,
-        'planned': planned,
-        'description': description,
-        'selfReportedState': selfReportedState,
-        'motivation': motivation,
-        'reflection': reflection,
-      };
+    'id': id,
+    'amountCents': amountCents,
+    'purchasedAt': purchasedAt.toIso8601String(),
+    'category': category,
+    'planned': planned,
+    'description': description,
+    'selfReportedState': selfReportedState,
+    'motivation': motivation,
+    'reflection': reflection,
+  };
 
   factory ExpenseEntry.fromJson(Map<String, Object?> json) {
     final amount = json['amountCents'];
