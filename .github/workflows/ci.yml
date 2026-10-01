@@ -20,8 +20,9 @@ jobs:
           cache: true
       - run: flutter --version
       - run: flutter create . --platforms web,android --project-name bipolaris
-      - run: dart format --output=none --set-exit-if-changed .
       - run: flutter pub get
+      - run: dart format --output=show lib/main.dart
+      - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
       - run: flutter build web --wasm
