@@ -1,0 +1,113 @@
+\documentclass[final]{beamer}
+\usepackage[orientation=landscape,size=custom,width=120,height=70,scale=1.45]{beamerposter}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{url}
+
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{headline}{fg=white,bg=blue!55!black}
+\setbeamercolor{block title}{fg=white,bg=blue!55!black}
+\setbeamercolor{block body}{fg=black,bg=blue!3}
+\setbeamerfont{block title}{size=\Large}
+\setbeamerfont{block body}{size=\large}
+
+\title{Instruções de segurança para agentes de codificação com IA em software de saúde mental}
+\author{Aloisio Costa}
+\institute{Afiliação institucional a confirmar}
+\date{Protocolo em elaboração · sem resultados empíricos}
+
+\begin{document}
+\begin{frame}[t]
+\begin{block}{}
+\centering
+{\Huge\bfseries \inserttitle\par}
+\vspace{0.45em}
+{\Large \insertauthor \quad|\quad \insertinstitute\par}
+\vspace{0.25em}
+{\large \insertdate\par}
+\end{block}
+\vspace{0.7em}
+\begin{columns}[t,totalwidth=\linewidth]
+\begin{column}{.31\linewidth}
+\begin{block}{Problema e pergunta}
+Agentes de codificação alteram código e testes a partir de instruções no repositório. Este projeto examinará patches produzidos em tarefas sintéticas de engenharia associadas a um protótipo acadêmico, sem avaliar pessoas ou cuidados clínicos.
+
+\vspace{0.5em}
+\textbf{Pergunta:} como uma skill de segurança versionada altera a proporção de execuções sem violação crítica de escopo não clínico, privacidade e supervisão humana?
+
+\vspace{0.5em}
+Estudos próximos avaliam agentes conversacionais e benchmarks de respostas em saúde mental. Este protocolo observará decisões de implementação de agentes de codificação; o hiato permanece provisório até a revisão de escopo [Feng et al., 2025; Badawi et al., 2026].
+\end{block}
+
+\begin{block}{Objeto e unidade de análise}
+\begin{itemize}
+  \item Objeto: patches e eventos de ferramenta gerados por configurações de agentes.
+  \item Unidade: uma execução agente × tarefa × condição × repetição.
+  \item Sistemas: ChatGPT e Codex como configurações completas, se registráveis.
+  \item Ambiente: commit limpo, tarefas inventadas, sem rede ou dados reais.
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{.36\linewidth}
+\begin{block}{Desenho planejado}
+Comparação pareada por tarefa:
+\begin{enumerate}
+  \item Instruções base do repositório.
+  \item Mesmo contexto acrescido da skill Bipolaris.
+\end{enumerate}
+O banco inicial prevê oito tarefas sintéticas e três repetições por célula. O total final depende do piloto e será congelado antes da fase confirmatória; esta contagem não é cálculo de poder.
+
+\vspace{0.5em}
+\textbf{Desfecho primário:} proporção de execuções com ao menos uma violação crítica, conforme rubrica pré-definida.
+
+\textbf{Secundários:} critérios funcionais permitidos, testes, severidade, recusa excessiva e variação entre repetições.
+
+\vspace{0.5em}
+Dois revisores humanos avaliarão patches e logs. Relatar concordância, incerteza, achados nulos e ameaças à validade [Ralph et al., 2020].
+\end{block}
+
+\begin{block}{Etapas de pesquisa}
+\centering
+\large
+Revisão de escopo \quad $\rightarrow$ \quad Piloto \quad $\rightarrow$ \quad Protocolo congelado \quad $\rightarrow$ \quad Experimento \quad $\rightarrow$ \quad Análise e relato
+\end{block}
+\end{column}
+
+\begin{column}{.29\linewidth}
+\begin{block}{Salvaguardas e limites}
+\begin{itemize}
+  \item Sem participantes, prontuários ou dados reais de saúde.
+  \item Sem diagnóstico, predição, triagem, tratamento ou manejo de crise.
+  \item Sem integração de modelo ao protótipo.
+  \item Registrar versões, prompts, permissões, commits e testes.
+  \item Qualquer coleta futura com pessoas exige determinação ética institucional antes de iniciar.
+\end{itemize}
+O estudo examina conformidade de engenharia em tarefas sintéticas; não mede eficácia clínica [WHO, 2024; NIST, 2024].
+\end{block}
+
+\begin{block}{Estado e próximos passos}
+\textbf{Estado:} protocolo e protótipo iniciais. Revisão não concluída. Nenhum experimento ou resultado foi produzido.
+
+\vspace{0.4em}
+\textbf{Próximos gates:} concluir revisão; validar tarefas e rubrica; pilotar; documentar decisão ética; congelar análise; executar estudo; atualizar artigo e banner com achados observados.
+\end{block}
+
+\begin{block}{Projeto e referências}
+Repositório: \url{https://github.com/aloisiocosta-prof/bipolaris}
+
+\vspace{0.4em}
+\scriptsize
+Feng et al. (2025). \textit{Journal of Medical Internet Research}, 27, e69639. DOI: 10.2196/69639.\par
+Badawi et al. (2026). \textit{EACL}, p. 3873--3896. DOI: 10.18653/v1/2026.eacl-long.180.\par
+Ralph et al. (2020). \textit{Empirical Standards for Software Engineering Research}.\par
+WHO (2024). \textit{Ethics and governance of AI for health}. NIST (2024). \textit{Generative AI Profile}, AI 600-1.
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+\end{document}
