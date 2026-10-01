@@ -15,6 +15,7 @@ Protótipo Flutter para Web (WasmGC) e Android, redesenhado como ponto de partid
 Com Flutter stable instalado:
 
 ```sh
+flutter create . --platforms web,android --project-name bipolaris
 flutter pub get
 flutter run -d chrome
 flutter test
