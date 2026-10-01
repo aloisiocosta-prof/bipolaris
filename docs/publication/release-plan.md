@@ -40,7 +40,7 @@ Git tags identificam o commit da release, e os arquivos ficam anexados à versã
 
 ## LaTeX e revisão editorial
 
-O artigo usa abnTeX2 e as referências BibTeX versionadas. ABNT controla apresentação/citações, mas não demonstra validade científica. Toda afirmação deve ser rastreável; nenhuma hipótese pode aparecer como resultado. O banner usa 120 × 90 cm apenas como prova provisória; adequar ao edital antes de imprimir ou submeter. Afiliação, coautores, financiamento, evento e dimensões finais dependem de confirmação dos autores.
+O artigo usa abnTeX2 e as referências BibTeX versionadas. ABNT controla apresentação/citações, mas não demonstra validade científica. Toda afirmação deve ser rastreável; nenhuma hipótese pode aparecer como resultado. O banner usa 120 × 70 cm apenas como prova provisória; adequar ao edital antes de imprimir ou submeter. Afiliação, coautores, financiamento, evento e dimensões finais dependem de confirmação dos autores.
 
 A CI compila os arquivos, confirma os PDFs e conta páginas. Revisão humana pré-release deve abrir os PDFs renderizados e verificar cortes, escala real, contraste, referências, autoria, edital, direitos e acessibilidade. CI não substitui revisão por pares, parecer ético, revisão linguística ou inspeção visual.
 
