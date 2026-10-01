@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class ExpenseEntry {
   const ExpenseEntry({
     required this.id,
