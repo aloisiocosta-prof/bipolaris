@@ -9,7 +9,9 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('offers to create a private expense reflection journal', (tester) async {
+  testWidgets('offers to create a private expense reflection journal', (
+    tester,
+  ) async {
     await tester.pumpWidget(const BipolarisApp());
     await tester.pumpAndSettle();
 
