@@ -52,8 +52,8 @@ void main() {
       ),
     ]);
 
-    expect(
-      () => vault.unlock('wrong-passphrase'),
+    await expectLater(
+      vault.unlock('wrong-passphrase'),
       throwsA(isA<VaultUnlockException>()),
     );
   });
