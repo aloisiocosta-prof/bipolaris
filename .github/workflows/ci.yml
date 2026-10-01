@@ -1,4 +1,4 @@
-name: Flutter CI
+name: Flutter and academic CI
 
 on:
   pull_request:
@@ -10,10 +10,10 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  flutter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.47.5"
@@ -24,5 +24,38 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
-      - run: flutter build web --wasm
+      - run: ./tool/build_web.sh
       - run: flutter build apk --debug
+      - name: Upload Web/PWA proof
+        uses: actions/upload-artifact@v7
+        with:
+          name: bipolaris-web-preview
+          path: build/web
+          retention-days: 14
+
+  academic-documents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Compile ABNT manuscript and work-in-progress poster
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: |
+            paper/main.tex
+            presentation/poster.tex
+          work_in_root_file_dir: true
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+      - name: Validate PDF outputs
+        run: |
+          test -s paper/main.pdf
+          test -s presentation/poster.pdf
+          pdfinfo paper/main.pdf
+          pdfinfo presentation/poster.pdf
+      - name: Upload academic proof PDFs
+        uses: actions/upload-artifact@v7
+        with:
+          name: bipolaris-academic-preview
+          path: |
+            paper/main.pdf
+            presentation/poster.pdf
+          retention-days: 14
