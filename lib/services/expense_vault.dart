@@ -56,10 +56,7 @@ class ExpenseVault {
               )
               .toList()
             ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
-      return VaultContents(
-        ExpenseVaultSession._(_storage, salt, key),
-        entries,
-      );
+      return VaultContents(ExpenseVaultSession._(_storage, salt, key), entries);
     } on VaultUnlockException {
       rethrow;
     } catch (_) {
