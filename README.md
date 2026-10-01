@@ -1,18 +1,33 @@
-# Bipolaris — protótipo acadêmico
+# Bipolaris — projeto acadêmico de engenharia de software e agentes de IA
 
-Protótipo Flutter para Web (WasmGC) e Android, redesenhado como ponto de partida de pesquisa sobre interfaces controladas pela pessoa e agentes de IA de escopo restrito.
+**Objetivo:** planejar, conduzir, documentar e apresentar pesquisa sobre o cumprimento de requisitos de segurança por agentes de codificação com IA ao alterar software experimental relacionado à saúde mental.
 
-> **Demonstração somente:** contém texto fictício; não digite nem importe informações pessoais ou de saúde. Não oferece diagnóstico, tratamento, recomendação de medicamentos, avaliação de risco ou atendimento de emergência. Nenhum modelo/agente está conectado.
+O protótipo Flutter Web/WasmGC e Android é um artefato de pesquisa. Usa somente texto fictício; não coleta dados, não se conecta a agentes e não realiza funções clínicas. A pesquisa não avaliará eficácia terapêutica, diagnóstico ou resposta a crises. Dados de saúde são sensíveis; qualquer futura coleta requer finalidade e governança apropriadas. Ver [fontes e limites](docs/references.md).
 
-## Estado do projeto
+## Pergunta principal proposta
 
-- v0.1: tela estática demonstrativa, sem persistência, rede, telemetria ou entrada de dados.
-- CI verifica formatação, análise, teste Flutter e builds Web/Wasm e Android.
-- Documentos de escopo, arquitetura, política futura de agentes, ameaças e plano de avaliação estão em [docs](docs/).
+Como instruções de segurança específicas do repositório alteram a conformidade de agentes de codificação com requisitos de escopo não clínico, privacidade e supervisão humana ao implementar tarefas sintéticas no Bipolaris?
+
+O possível hiato permanece provisório até a revisão de escopo.
+
+## Artefatos
+
+- [Protocolo de pesquisa](docs/research/protocol.md)
+- [Protocolo de revisão de escopo](docs/research/literature-review-protocol.md)
+- [Tarefas sintéticas](docs/research/benchmark-scenarios.md)
+- [Rubrica de avaliação](docs/research/rubric.md)
+- [Skill de segurança](.agents/skills/bipolaris-safe-implementation/SKILL.md)
+- [Esqueleto ABNT em LaTeX](paper/main.tex)
+- [Plano do banner](presentation/poster-outline.md)
+- [Visão e limites do artefato](docs/product/vision.md), [arquitetura](docs/architecture/overview.md), [modelo de ameaças](docs/security/threat-model.md)
+
+## Estado científico
+
+Há protocolo proposto e protótipo inicial, mas a revisão bibliográfica não foi concluída, o experimento não foi executado e não existem resultados, submissão ou aceitação. Não utilizar dados reais de saúde ou material de pacientes.
 
 ## Executar
 
-Com Flutter stable instalado:
+Com Flutter 3.47.5:
 
 ```sh
 flutter create . --platforms web,android --project-name bipolaris
@@ -23,14 +38,8 @@ flutter build web --wasm
 flutter build apk --debug
 ```
 
-A saída Wasm requer navegador compatível com WasmGC; verifique a matriz oficial do Flutter antes de definir suporte de produção: https://docs.flutter.dev/platform-integration/web/wasm.
+A compilação WasmGC requer navegadores compatíveis; conferir a documentação Flutter atual antes de afirmar suporte: https://docs.flutter.dev/platform-integration/web/wasm.
 
-## Próximas etapas de pesquisa
+## CI
 
-1. Revisar finalidade pretendida, requisitos e riscos com profissionais e pessoas com experiência vivida.
-2. Fazer avaliação de privacidade, segurança e acessibilidade com dados fictícios.
-3. Submeter protocolo à governança ética aplicável antes de pesquisa com participantes.
-4. Avaliar enquadramento regulatório antes de divulgar qualquer finalidade médica ou clínica.
-5. Só então decidir se cabe persistência local, backend ou integração de IA.
-
-Consulte [a visão do produto](docs/product/vision.md), [política para agentes](docs/ai/agent-policy.md), [modelo de ameaças](docs/security/threat-model.md), [plano de avaliação](docs/research/evaluation-plan.md) e [fontes](docs/references.md).
+O GitHub Actions verifica formatação, análise estática, teste de widget e builds Web/Wasm e Android. O workflow gera scaffolds de plataforma no runner; esse comportamento e o ambiente devem ser registrados na replicação.
