@@ -2,20 +2,20 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cryptography/cryptography.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_storage/shared_preferences.dart';
 
 import '../models/expense_entry.dart';
 
 class ExpenseVault {
-  ExpenseVault({SharedPreferencesAsync? preferences})
-    : _preferences = preferences ?? SharedPreferencesAsync();
+  ExpenseVault({StringStore? storage})
+    : _storage = storage ?? SharedPreferencesStringStore();
 
   static const _storageKey = 'bipolaris.expense-vault.v1';
   static const _envelopeVersion = 1;
   static const _iterations = 600000;
   static final _cipher = AesGcm.with256bits();
 
-  final SharedPreferencesAsync _preferences;
+  final StringStore _storage;
 
   Future<bool> exists() async =>
       await _preferences.getString(_storageKey) != null;
@@ -119,6 +119,30 @@ class ExpenseVaultSession {
   }
 
   Future<void> destroy() => _preferences.remove(ExpenseVault._storageKey);
+}
+
+abstract interface class StringStore {
+  Future<String?> getString(String key);
+
+  Future<void> setString(String key, String value);
+
+  Future<void> remove(String key);
+}
+
+class SharedPreferencesStringStore implements StringStore {
+  SharedPreferencesStringStore() : _preferences = SharedPreferencesAsync();
+
+  final SharedPreferencesAsync _preferences;
+
+  @override
+  Future<String?> getString(String key) => _preferences.getString(key);
+
+  @override
+  Future<void> setString(String key, String value) =>
+      _preferences.setString(key, value);
+
+  @override
+  Future<void> remove(String key) => _preferences.remove(key);
 }
 
 class VaultUnlockException implements Exception {
