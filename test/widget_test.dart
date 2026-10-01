@@ -1,6 +1,6 @@
 import 'package:bipolaris/main.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'services/expense_vault.dart';
+import 'package:bipolaris/services/expense_vault.dart';
 import 'support/memory_string_store.dart';
 
 void main() {
