@@ -1,18 +1,15 @@
 import 'package:bipolaris/main.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'services/expense_vault.dart';
+import 'support/memory_string_store.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-  });
-
   testWidgets('offers to create a private expense reflection journal', (
     tester,
   ) async {
-    await tester.pumpWidget(const BipolarisApp());
+    await tester.pumpWidget(
+      BipolarisApp(vault: ExpenseVault(storage: MemoryStringStore())),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Bipolaris'), findsOneWidget);
