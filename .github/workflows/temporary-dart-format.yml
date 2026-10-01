@@ -1,0 +1,20 @@
+name: temporary-dart-format
+on:
+  push:
+    branches:
+      - codex/financial-reflection-mvp-20261001
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter create . --platforms web,android --project-name bipolaris
+      - run: dart format lib test
+      - run: zip -q /tmp/formatted-dart.zip lib/main.dart lib/models/expense_entry.dart lib/services/expense_vault.dart test/expense_entry_test.dart test/expense_vault_test.dart test/widget_test.dart test/support/memory_string_store.dart
+      - uses: actions/upload-artifact@v4
+        with:
+          name: formatted-dart-latest
+          path: /tmp/formatted-dart.zip
