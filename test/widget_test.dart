@@ -138,7 +138,10 @@ void main() {
     expect(find.byType(PrivacyAndUsePage), findsOneWidget);
     expect(find.text('Que dados ficam salvos e onde?'), findsOneWidget);
 
-    expect(find.text('Informações claras, quando você precisar'), findsOneWidget);
+    expect(
+      find.text('Informações claras, quando você precisar'),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
