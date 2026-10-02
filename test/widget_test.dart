@@ -31,8 +31,9 @@ void main() {
     tester,
   ) async {
     final now = DateTime.now();
-    final store = MemoryStringStore();
-    final session = await ExpenseVault(storage: store).create('senha de teste');
+    final session = await ExpenseVault(
+      storage: MemoryStringStore(),
+    ).create('senha de teste');
     final entries = [
       ExpenseEntry(
         id: 'today-food',
@@ -83,7 +84,7 @@ void main() {
     await tester.tap(find.text('Alimentação').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('R\$ 10,00'), findsOneWidget);
+    expect(find.text('R\$ 10,00'), findsNWidgets(2));
     expect(find.text('1'), findsOneWidget);
     expect(find.text('Tranquilo(a)'), findsOneWidget);
     expect(find.text('Preocupado(a)'), findsNothing);
