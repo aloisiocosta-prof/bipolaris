@@ -6,10 +6,13 @@ Bipolaris é um MVP Flutter para a pessoa registrar gastos e, se desejar, descre
 
 - Criar e desbloquear diário protegido por senha.
 - Registrar valor em reais, categoria, data, situação planejada/não planejada e descrição opcional.
-- Acrescentar estado autodescrito, motivação e reflexão em campos opcionais.
+- Acrescentar estado autodescrito, motivação e reflexão em campos opcionais, com sugestões rápidas e texto livre.
 - Consultar, editar e apagar registros.
+- Filtrar por todo o histórico, mês atual ou últimos 30 dias e por categoria; lista, contagem, totais e agrupamentos usam os mesmos filtros.
 - Ver total registrado e somas descritivas por estado autodeclarado.
 - Copiar exportação JSON em texto legível, apagar todos os registros e bloquear o diário.
+
+O racional de UX/UI, fluxos, escolhas visuais, critérios de aceitação e limites das referências está em [docs/design-system.md](docs/design-system.md).
 
 ## Privacidade e limites
 
@@ -49,6 +52,7 @@ O protocolo atual propõe estudar instruções de segurança para agentes de cod
 - Michalak EE, et al. Self-monitoring with the PolarUs app: impacts and unmet needs. *Journal of Affective Disorders*. 2025;383:374–384. doi:10.1016/j.jad.2025.04.107.
 - ANPD. Guia orientativo de segurança da informação para agentes de pequeno porte, atualizado em 2025: https://www.gov.br/anpd/pt-br/centrais-de-conteudo/materiais-educativos-e-publicacoes/guia-orientativo-sobre-seguranca-da-informacao-para-agentes-de-tratamento-de-pequeno-porte
 - Flutter Wasm: https://docs.flutter.dev/platform-integration/web/wasm
+- Flutter accessibility: https://docs.flutter.dev/ui/accessibility
 - GitHub Pages: https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages
 - Dart cryptography: https://pub.dev/packages/cryptography
 - Flutter shared_preferences: https://pub.dev/packages/shared_preferences
