@@ -21,8 +21,6 @@ jobs:
       - run: flutter --version
       - run: flutter create . --platforms web,android --project-name bipolaris
       - run: flutter pub get
-      - run: dart format lib/main.dart
-      - run: git diff -- lib/main.dart
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
