@@ -82,3 +82,26 @@ O aviso não declara conformidade jurídica com a LGPD nem substitui uma políti
 Referências oficiais consultadas:
 - Brasil. Lei nº 13.709/2018 (LGPD), arts. 5º, 6º, 9º, 11 e 18. https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm
 - Autoridade Nacional de Proteção de Dados (ANPD). Documentos e publicações. https://www.gov.br/anpd/pt-br/documentos-e-publicacoes
+
+
+## SPA web e abordagem mobile-first
+
+O alvo Web do Bipolaris é uma aplicação interativa Flutter de página única: a shell HTML carrega o app e as telas mudam no cliente. A navegação usa o `Router` do Flutter SDK para manter rota, histórico e endereço sincronizados; o caminho da privacidade é `/#/privacy` no navegador, compatível com o hosting estático do GitHub Pages. O parser também aceita `/privacy` para links profundos nas plataformas nativas.
+
+A interface segue mobile-first: a estrutura padrão usa uma coluna, largura integral com margens de 16 dp, conteúdo rolável e controles Material 3 com alvos de toque ampliados. Quando há mais espaço, componentes podem se expandir com base nas restrições recebidas por `LayoutBuilder`; os cartões de resumo empilham abaixo de 600 dp e ficam lado a lado a partir desse ponto. O ponto de quebra é baseado na largura disponível, não no tipo ou nome do dispositivo.
+
+Critérios para cada tela nova:
+- Primeiro, validar fluxo, leitura e interação em 320–390 dp; depois ampliar para tablet e desktop.
+- Evitar rolagem horizontal, campos comprimidos e ações que dependam de hover; manter a página rolável com teclado virtual.
+- Testar semântica e navegação por teclado no Web, além dos testes de widget nas larguras estreitas.
+- Preservar a mesma função principal no Android; adaptar a navegação ao botão de voltar nativo.
+
+A tela rica e interativa do diário é adequada ao modelo app-centric que Flutter recomenda para SPA/PWA. Conteúdo editorial ou páginas públicas para indexação devem continuar em HTML document-centric se forem adicionados ao projeto.
+
+Referências técnicas:
+- Flutter. Web FAQ — cenários adequados para Flutter Web e SPA. https://docs.flutter.dev/platform-integration/web/faq
+- Flutter. Navigation and routing. https://docs.flutter.dev/ui/navigation
+- Flutter. Deep linking. https://docs.flutter.dev/ui/navigation/deep-linking
+- Flutter. Configuring the URL strategy on the web. https://docs.flutter.dev/ui/navigation/url-strategies
+- Flutter. General approach to adaptive apps. https://docs.flutter.dev/ui/adaptive-responsive/general
+- web.dev. Responsive web design basics. https://web.dev/articles/responsive-web-design-basics

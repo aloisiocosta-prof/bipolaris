@@ -10,23 +10,134 @@ import 'privacy_and_use_page.dart';
 
 void main() => runApp(const BipolarisApp());
 
-class BipolarisApp extends StatelessWidget {
+class BipolarisApp extends StatefulWidget {
   const BipolarisApp({super.key, this.vault});
 
   final ExpenseVault? vault;
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  State<BipolarisApp> createState() => _BipolarisAppState();
+}
+
+class _BipolarisAppState extends State<BipolarisApp> {
+  late final BipolarisRouterDelegate _routerDelegate = BipolarisRouterDelegate(
+    vault: widget.vault,
+  );
+
+  @override
+  void dispose() {
+    _routerDelegate.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
     title: 'Bipolaris — diário financeiro reflexivo',
     theme: BipolarisTheme.light(),
-    home: VaultGate(vault: vault),
+    routeInformationParser: const BipolarisRouteInformationParser(),
+    routerDelegate: _routerDelegate,
+    backButtonDispatcher: RootBackButtonDispatcher(),
+  );
+}
+
+@immutable
+class BipolarisRouteConfiguration {
+  const BipolarisRouteConfiguration({this.showPrivacy = false});
+
+  final bool showPrivacy;
+}
+
+class BipolarisRouteInformationParser
+    extends RouteInformationParser<BipolarisRouteConfiguration> {
+  const BipolarisRouteInformationParser();
+
+  @override
+  Future<BipolarisRouteConfiguration> parseRouteInformation(
+    RouteInformation routeInformation,
+  ) async {
+    final uri = routeInformation.uri;
+    final location = uri.fragment.startsWith('/') ? uri.fragment : uri.path;
+    final segments = location
+        .split('/')
+        .where((segment) => segment.isNotEmpty)
+        .toList(growable: false);
+    return BipolarisRouteConfiguration(
+      showPrivacy: segments.isNotEmpty && segments.last == 'privacy',
+    );
+  }
+
+  @override
+  RouteInformation restoreRouteInformation(
+    BipolarisRouteConfiguration configuration,
+  ) => RouteInformation(
+    uri: Uri(path: configuration.showPrivacy ? '/privacy' : '/'),
+  );
+}
+
+class BipolarisRouterDelegate
+    extends RouterDelegate<BipolarisRouteConfiguration>
+    with
+        ChangeNotifier,
+        PopNavigatorRouterDelegateMixin<BipolarisRouteConfiguration> {
+  BipolarisRouterDelegate({this.vault});
+
+  final ExpenseVault? vault;
+  static const _privacyPageKey = ValueKey<String>('privacy-page');
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  bool _showPrivacy = false;
+
+  @override
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
+  @override
+  BipolarisRouteConfiguration get currentConfiguration =>
+      BipolarisRouteConfiguration(showPrivacy: _showPrivacy);
+
+  @override
+  Future<void> setNewRoutePath(
+    BipolarisRouteConfiguration configuration,
+  ) async {
+    _showPrivacy = configuration.showPrivacy;
+    notifyListeners();
+  }
+
+  void openPrivacy() {
+    if (_showPrivacy) return;
+    _showPrivacy = true;
+    notifyListeners();
+  }
+
+  void _closePrivacy() {
+    if (!_showPrivacy) return;
+    _showPrivacy = false;
+    notifyListeners();
+  }
+
+  @override
+  Widget build(BuildContext context) => Navigator(
+    key: navigatorKey,
+    pages: [
+      MaterialPage<void>(
+        key: const ValueKey<String>('vault-gate'),
+        child: VaultGate(vault: vault, onOpenPrivacy: openPrivacy),
+      ),
+      if (_showPrivacy)
+        const MaterialPage<void>(
+          key: _privacyPageKey,
+          child: PrivacyAndUsePage(),
+        ),
+    ],
+    onDidRemovePage: (page) {
+      if (page.key == _privacyPageKey) _closePrivacy();
+    },
   );
 }
 
 class VaultGate extends StatefulWidget {
-  const VaultGate({super.key, this.vault});
+  const VaultGate({required this.onOpenPrivacy, super.key, this.vault});
 
   final ExpenseVault? vault;
+  final VoidCallback onOpenPrivacy;
 
   @override
   State<VaultGate> createState() => _VaultGateState();
@@ -130,6 +241,7 @@ class _VaultGateState extends State<VaultGate> {
         session: session,
         initialEntries: _entries,
         onLock: _lock,
+        onOpenPrivacy: widget.onOpenPrivacy,
       );
     }
     final creating = _hasVault == false;
@@ -166,11 +278,7 @@ class _VaultGateState extends State<VaultGate> {
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const PrivacyAndUsePage(),
-                  ),
-                ),
+                onPressed: widget.onOpenPrivacy,
                 icon: const Icon(Icons.privacy_tip_outlined),
                 label: const Text('Privacidade e uso'),
               ),
@@ -241,12 +349,14 @@ class JournalPage extends StatefulWidget {
     required this.session,
     required this.initialEntries,
     required this.onLock,
+    required this.onOpenPrivacy,
     super.key,
   });
 
   final ExpenseVaultSession session;
   final List<ExpenseEntry> initialEntries;
   final VoidCallback onLock;
+  final VoidCallback onOpenPrivacy;
 
   @override
   State<JournalPage> createState() => _JournalPageState();
@@ -448,13 +558,7 @@ class _JournalPageState extends State<JournalPage> {
             onSelected: (value) {
               if (value == 'delete') _deleteAll();
               if (value == 'lock') widget.onLock();
-              if (value == 'privacy') {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const PrivacyAndUsePage(),
-                  ),
-                );
-              }
+              if (value == 'privacy') widget.onOpenPrivacy();
             },
             itemBuilder: (_) => const [
               PopupMenuItem(

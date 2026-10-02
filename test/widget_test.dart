@@ -9,6 +9,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/memory_string_store.dart';
 
 void main() {
+  test('route parser accepts hash and path deep links', () async {
+    const parser = BipolarisRouteInformationParser();
+
+    final hashRoute = await parser.parseRouteInformation(
+      RouteInformation(uri: Uri.parse('https://bipolaris.test/#/privacy')),
+    );
+    final pathRoute = await parser.parseRouteInformation(
+      RouteInformation(uri: Uri.parse('https://bipolaris.test/privacy')),
+    );
+    final rootRoute = await parser.parseRouteInformation(
+      RouteInformation(uri: Uri.parse('https://bipolaris.test/')),
+    );
+
+    expect(hashRoute.showPrivacy, isTrue);
+    expect(pathRoute.showPrivacy, isTrue);
+    expect(rootRoute.showPrivacy, isFalse);
+    expect(parser.restoreRouteInformation(hashRoute).uri.path, '/privacy');
+  });
+
   testWidgets('offers to create a private expense reflection journal', (
     tester,
   ) async {
@@ -66,6 +85,7 @@ void main() {
           session: session,
           initialEntries: entries,
           onLock: () {},
+          onOpenPrivacy: () {},
         ),
       ),
     );
@@ -102,6 +122,7 @@ void main() {
           session: session,
           initialEntries: const [],
           onLock: () {},
+          onOpenPrivacy: () {},
         ),
       ),
     );
@@ -151,10 +172,17 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: BipolarisTheme.light(),
-        home: JournalPage(
-          session: _FakeSession(),
-          initialEntries: const [],
-          onLock: () {},
+        home: Builder(
+          builder: (context) => JournalPage(
+            session: _FakeSession(),
+            initialEntries: const [],
+            onLock: () {},
+            onOpenPrivacy: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const PrivacyAndUsePage(),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -166,6 +194,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(PrivacyAndUsePage), findsOneWidget);
+    expect(find.text('Como usar o diário'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('privacy guide remains readable on a narrow mobile viewport', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 740);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BipolarisTheme.light(),
+        home: const PrivacyAndUsePage(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Privacidade e uso'), findsOneWidget);
     expect(find.text('Como usar o diário'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
@@ -194,6 +243,7 @@ void main() {
             ),
           ],
           onLock: () {},
+          onOpenPrivacy: () {},
         ),
       ),
     );
