@@ -22,7 +22,10 @@ jobs:
       - run: flutter create . --platforms web,android --project-name bipolaris
       - run: flutter pub get
       - name: Temporary formatter output
-        run: dart format --output=show lib/main.dart test/widget_test.dart | sed -n '1,120p'
+        run: |
+          dart format --output=show lib/main.dart | sed -n '275,290p'
+          dart format --output=show lib/main.dart | sed -n '555,575p'
+          dart format --output=show test/widget_test.dart | sed -n '10,55p'
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
