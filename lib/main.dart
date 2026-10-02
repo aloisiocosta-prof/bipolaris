@@ -75,8 +75,7 @@ class BipolarisRouteInformationParser
 
 class BipolarisRouterDelegate
     extends RouterDelegate<BipolarisRouteConfiguration>
-    with
-        ChangeNotifier,
+    with ChangeNotifier,
         PopNavigatorRouterDelegateMixin<BipolarisRouteConfiguration> {
   BipolarisRouterDelegate({this.vault});
 
