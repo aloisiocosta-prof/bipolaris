@@ -175,11 +175,17 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: BipolarisTheme.light(),
-        home: JournalPage(
-          session: _FakeSession(),
-          initialEntries: const [],
-          onLock: () {},
-          onOpenPrivacy: () {},
+        home: Builder(
+          builder: (context) => JournalPage(
+            session: _FakeSession(),
+            initialEntries: const [],
+            onLock: () {},
+            onOpenPrivacy: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const PrivacyAndUsePage(),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -191,6 +197,27 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(PrivacyAndUsePage), findsOneWidget);
+    expect(find.text('Como usar o diário'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('privacy guide remains readable on a narrow mobile viewport', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 740);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BipolarisTheme.light(),
+        home: const PrivacyAndUsePage(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Privacidade e uso'), findsOneWidget);
     expect(find.text('Como usar o diário'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
