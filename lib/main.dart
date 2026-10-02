@@ -55,9 +55,7 @@ class BipolarisRouteInformationParser
     RouteInformation routeInformation,
   ) async {
     final uri = routeInformation.uri;
-    final location = uri.fragment.startsWith('/')
-        ? uri.fragment
-        : uri.path;
+    final location = uri.fragment.startsWith('/') ? uri.fragment : uri.path;
     final segments = location
         .split('/')
         .where((segment) => segment.isNotEmpty)
