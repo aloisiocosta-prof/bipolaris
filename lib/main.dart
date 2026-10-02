@@ -949,8 +949,7 @@ class _ExpenseFormState extends State<_ExpenseForm> {
               const SizedBox(height: 16),
               _ChoiceQuestion(
                 title: 'O que motivou a compra? (opcional)',
-                helper:
-                    'As opções não classificam a compra nem avaliam você.',
+                helper: 'As opções não classificam a compra nem avaliam você.',
                 options: _motivationOptions,
                 selected: _motivationChoice,
                 onSelected: (value) =>
@@ -1029,8 +1028,7 @@ class _ChoiceQuestion extends StatelessWidget {
               (option) => ChoiceChip(
                 label: Text(option),
                 selected: selected == option,
-                onSelected: (checked) =>
-                    onSelected(checked ? option : null),
+                onSelected: (checked) => onSelected(checked ? option : null),
               ),
             )
             .toList(),
@@ -1039,10 +1037,7 @@ class _ChoiceQuestion extends StatelessWidget {
   );
 }
 
-String? _choiceValue(
-  String? choice,
-  TextEditingController customValue,
-) {
+String? _choiceValue(String? choice, TextEditingController customValue) {
   if (choice == null) return null;
   if (choice != 'Outro / escrever') return choice;
   final value = customValue.text.trim();
