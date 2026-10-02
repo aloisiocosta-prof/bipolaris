@@ -241,7 +241,7 @@ class _VaultGateState extends State<VaultGate> {
         session: session,
         initialEntries: _entries,
         onLock: _lock,
-        onOpenPrivacy: widget.onOpenPrivacy,
+        onOpenPrivacy: () => Router.navigate(context, widget.onOpenPrivacy),
       );
     }
     final creating = _hasVault == false;
@@ -558,9 +558,7 @@ class _JournalPageState extends State<JournalPage> {
             onSelected: (value) {
               if (value == 'delete') _deleteAll();
               if (value == 'lock') widget.onLock();
-              if (value == 'privacy') {
-                Router.navigate(context, widget.onOpenPrivacy);
-              }
+              if (value == 'privacy') widget.onOpenPrivacy();
             },
             itemBuilder: (_) => const [
               PopupMenuItem(
