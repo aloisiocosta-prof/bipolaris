@@ -20,8 +20,9 @@ class BipolarisApp extends StatefulWidget {
 }
 
 class _BipolarisAppState extends State<BipolarisApp> {
-  late final BipolarisRouterDelegate _routerDelegate =
-      BipolarisRouterDelegate(vault: widget.vault);
+  late final BipolarisRouterDelegate _routerDelegate = BipolarisRouterDelegate(
+    vault: widget.vault,
+  );
 
   @override
   void dispose() {
@@ -75,7 +76,8 @@ class BipolarisRouteInformationParser
 
 class BipolarisRouterDelegate
     extends RouterDelegate<BipolarisRouteConfiguration>
-    with ChangeNotifier,
+    with
+        ChangeNotifier,
         PopNavigatorRouterDelegateMixin<BipolarisRouteConfiguration> {
   BipolarisRouterDelegate({this.vault});
 
