@@ -36,7 +36,10 @@ void main() {
 
     await tester.tap(find.text('Privacidade e uso'));
     await tester.pumpAndSettle();
-    expect(find.text('Informações claras, quando você precisar'), findsOneWidget);
+    expect(
+      find.text('Informações claras, quando você precisar'),
+      findsOneWidget,
+    );
 
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
