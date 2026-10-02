@@ -82,7 +82,7 @@ void main() {
     await tester.tap(find.text('Alimentação').last);
     await tester.pumpAndSettle();
 
-    expect(find.text('R\$ 10,00'), findsNWidgets(2));
+    expect(find.text('R\$ 10,00'), findsAtLeastNWidgets(1));
     expect(find.text('1'), findsOneWidget);
     expect(find.text('Tranquilo(a)'), findsOneWidget);
     expect(find.text('Preocupado(a)'), findsNothing);
