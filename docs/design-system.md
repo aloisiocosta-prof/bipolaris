@@ -86,7 +86,7 @@ Referências oficiais consultadas:
 
 ## SPA web e abordagem mobile-first
 
-O alvo Web do Bipolaris é uma aplicação interativa Flutter de página única: a shell HTML carrega o app e as telas mudam no cliente. A navegação usa o `Router` do Flutter SDK para manter rota, histórico e endereço sincronizados; o caminho da privacidade é `/#/privacy` no navegador, compatível com o hosting estático do GitHub Pages. O parser também aceita `/privacy` para links profundos nas plataformas nativas.
+O alvo Web do Bipolaris é uma aplicação interativa Flutter de página única: a shell HTML carrega o app e as telas mudam no cliente. A navegação usa o `Router` do Flutter SDK para manter rota, histórico e endereço sincronizados. A abertura da tela de privacidade usa `Router.navigate` para criar uma entrada no histórico; o caminho da privacidade é `/#/privacy` no navegador, compatível com o hosting estático do GitHub Pages. O parser também aceita `/privacy` para links profundos nas plataformas nativas.
 
 A interface segue mobile-first: a estrutura padrão usa uma coluna, largura integral com margens de 16 dp, conteúdo rolável e controles Material 3 com alvos de toque ampliados. Quando há mais espaço, componentes podem se expandir com base nas restrições recebidas por `LayoutBuilder`; os cartões de resumo empilham abaixo de 600 dp e ficam lado a lado a partir desse ponto. O ponto de quebra é baseado na largura disponível, não no tipo ou nome do dispositivo.
 
@@ -101,6 +101,7 @@ A tela rica e interativa do diário é adequada ao modelo app-centric que Flutte
 Referências técnicas:
 - Flutter. Web FAQ — cenários adequados para Flutter Web e SPA. https://docs.flutter.dev/platform-integration/web/faq
 - Flutter. Navigation and routing. https://docs.flutter.dev/ui/navigation
+- Flutter API. `Router.navigate`. https://api.flutter.dev/flutter/widgets/Router/navigate.html
 - Flutter. Deep linking. https://docs.flutter.dev/ui/navigation/deep-linking
 - Flutter. Configuring the URL strategy on the web. https://docs.flutter.dev/ui/navigation/url-strategies
 - Flutter. General approach to adaptive apps. https://docs.flutter.dev/ui/adaptive-responsive/general
