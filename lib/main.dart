@@ -241,7 +241,7 @@ class _VaultGateState extends State<VaultGate> {
         session: session,
         initialEntries: _entries,
         onLock: _lock,
-        onOpenPrivacy: widget.onOpenPrivacy,
+        onOpenPrivacy: () => Router.navigate(context, widget.onOpenPrivacy),
       );
     }
     final creating = _hasVault == false;
@@ -278,7 +278,7 @@ class _VaultGateState extends State<VaultGate> {
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: widget.onOpenPrivacy,
+                onPressed: () => Router.navigate(context, widget.onOpenPrivacy),
                 icon: const Icon(Icons.privacy_tip_outlined),
                 label: const Text('Privacidade e uso'),
               ),
