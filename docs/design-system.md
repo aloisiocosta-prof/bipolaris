@@ -71,3 +71,14 @@ A revisão exploratória de Vial, Boudhraâ e Dumont descreve a necessidade de r
 - Google Play. Clue Period & Cycle Tracker, listagem e capturas exploradas para referência visual. https://play.google.com/store/apps/details?id=com.popularapp.periodcalendar
 - Flutter. Accessibility: UI design and styling. https://docs.flutter.dev/ui/accessibility/ui-design-and-styling
 - Flutter. Web accessibility. https://docs.flutter.dev/ui/accessibility/web-accessibility
+
+
+## Privacidade e transparência na interface
+
+A tela “Privacidade e uso” está disponível antes da criação do cofre e no menu do diário. Ela apresenta em linguagem direta os dados que podem ser escritos, o armazenamento local cifrado, a ausência de conta/sincronização no MVP, os limites da cifra, a exportação JSON sem cifra e como apagar registros ou dados locais. As reflexões permanecem opcionais.
+
+O aviso não declara conformidade jurídica com a LGPD nem substitui uma política completa: esta versão não identifica um controlador e canal formal para exercício de direitos. Se o produto passar a receber ou compartilhar registros, essa lacuna deverá ser resolvida antes da coleta remota. A implementação segue o princípio de apresentar informação simples e destacada e evita afirmar direitos ou processos que a interface não oferece.
+
+Referências oficiais consultadas:
+- Brasil. Lei nº 13.709/2018 (LGPD), arts. 5º, 6º, 9º, 11 e 18. https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709compilado.htm
+- Autoridade Nacional de Proteção de Dados (ANPD). Documentos e publicações. https://www.gov.br/anpd/pt-br/documentos-e-publicacoes
