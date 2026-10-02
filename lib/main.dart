@@ -119,7 +119,10 @@ class BipolarisRouterDelegate
     pages: [
       MaterialPage<void>(
         key: const ValueKey<String>('vault-gate'),
-        child: VaultGate(vault: vault, onOpenPrivacy: openPrivacy),
+        child: VaultGate(
+          vault: vault,
+          onOpenPrivacy: () => Router.navigate(context, openPrivacy),
+        ),
       ),
       if (_showPrivacy)
         const MaterialPage<void>(
