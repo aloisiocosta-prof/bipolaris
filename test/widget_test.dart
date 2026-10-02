@@ -122,6 +122,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
   });
+
   testWidgets('summary cards stack on narrow screens and fit large totals', (
     tester,
   ) async {
@@ -141,7 +142,7 @@ void main() {
               id: 'large-total',
               amountCents: 123456789,
               purchasedAt: DateTime.now(),
-              category: 'Alimentação',
+              category: 'Outro',
               planned: true,
             ),
           ],
@@ -172,7 +173,6 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 }
-
 
 class _FakeSession implements ExpenseVaultSession {
   @override
