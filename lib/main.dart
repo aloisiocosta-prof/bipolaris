@@ -367,6 +367,7 @@ class _JournalPageState extends State<JournalPage> {
   bool _saving = false;
   String _periodFilter = 'all';
   String _categoryFilter = '__all__';
+  int _selectedDestination = 0;
 
   @override
   void initState() {
@@ -393,12 +394,23 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<void> _editEntry([ExpenseEntry? existing]) async {
-    final result = await showModalBottomSheet<ExpenseEntry>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => _ExpenseForm(existing: existing),
-    );
+    final isWide = MediaQuery.sizeOf(context).width >= 600;
+    final result = isWide
+        ? await showDialog<ExpenseEntry>(
+            context: context,
+            builder: (_) => Dialog(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600, maxHeight: 760),
+                child: _ExpenseForm(existing: existing),
+              ),
+            ),
+          )
+        : await showModalBottomSheet<ExpenseEntry>(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            builder: (_) => _ExpenseForm(existing: existing),
+          );
     if (result == null || !mounted) return;
     final next = [..._entries];
     final index = next.indexWhere((entry) => entry.id == result.id);
@@ -591,9 +603,50 @@ class _JournalPageState extends State<JournalPage> {
         icon: const Icon(Icons.add),
         label: const Text('Registrar gasto'),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 820),
+      bottomNavigationBar: MediaQuery.sizeOf(context).width < 600
+          ? NavigationBar(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: 'Resumo',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: 'Registros',
+                ),
+              ],
+            )
+          : null,
+      body: Row(
+        children: [
+          if (MediaQuery.sizeOf(context).width >= 600)
+            NavigationRail(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              labelType: NavigationRailLabelType.all,
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: Text('Resumo'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: Text('Registros'),
+                ),
+              ],
+            ),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 820),
           child: ListView(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
             children: [
@@ -618,6 +671,7 @@ class _JournalPageState extends State<JournalPage> {
                 ),
               ),
               const SizedBox(height: 12),
+              if (_selectedDestination == 1)
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
@@ -711,7 +765,7 @@ class _JournalPageState extends State<JournalPage> {
                   );
                 },
               ),
-              if (sortedGroups.isNotEmpty) ...[
+              if (_selectedDestination == 1 && sortedGroups.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 Text(
                   'Soma dos gastos por estado que você descreveu',
@@ -742,7 +796,7 @@ class _JournalPageState extends State<JournalPage> {
               ],
               const SizedBox(height: 20),
               Text(
-                'Seus gastos',
+                _selectedDestination == 0 ? 'Registros recentes' : 'Seus gastos',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               if (_saving)
@@ -777,7 +831,9 @@ class _JournalPageState extends State<JournalPage> {
                   ),
                 )
               else
-                ...visibleEntries.map(
+                ...( _selectedDestination == 0
+                    ? visibleEntries.take(3)
+                    : visibleEntries).map(
                   (entry) => Card(
                     child: ListTile(
                       leading: Icon(
@@ -807,6 +863,15 @@ class _JournalPageState extends State<JournalPage> {
                   ),
                 ),
               const SizedBox(height: 12),
+              if (_selectedDestination == 0 && visibleEntries.length > 3)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    onPressed: () => setState(() => _selectedDestination = 1),
+                    icon: const Icon(Icons.receipt_long_outlined),
+                    label: const Text('Ver todos os registros'),
+                  ),
+                ),
               const Text(
                 'Privacidade: o diário é cifrado com sua senha e fica no '
                 'armazenamento local deste navegador ou dispositivo. Não há '
@@ -818,8 +883,10 @@ class _JournalPageState extends State<JournalPage> {
                 'crises nem aconselhamento financeiro ou clínico.',
               ),
             ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
