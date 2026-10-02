@@ -250,403 +250,403 @@ class _VaultGateState extends State<VaultGate> {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
-                child: ListView(
-                  padding: const EdgeInsets.all(24),
-                  shrinkWrap: true,
-                  children: [
-                    const Icon(Icons.lock_outline, size: 48),
-                    const SizedBox(height: 16),
-                    Text(
-                      creating ? 'Crie seu diário protegido' : 'Abra seu diário',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'Seus registros são cifrados no dispositivo com uma senha que só '
-                      'você conhece. Eles não são enviados ao Bipolaris, ao GitHub ou '
-                      'a um profissional.',
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'A senha não pode ser recuperada. Exporte uma cópia de segurança '
-                      'antes de trocar de navegador ou dispositivo. A cifra protege os '
-                      'dados salvos, mas não protege um dispositivo desbloqueado ou '
-                      'uma página comprometida.',
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    OutlinedButton.icon(
-                      onPressed: () => Router.navigate(context, widget.onOpenPrivacy),
-                      icon: const Icon(Icons.privacy_tip_outlined),
-                      label: const Text('Privacidade e uso'),
-                    ),
-                    const SizedBox(height: 24),
-                    TextField(
-                      controller: _passphrase,
-                      obscureText: true,
-                      autofillHints: const [AutofillHints.password],
-                      decoration: InputDecoration(
-                        labelText: creating ? 'Crie uma senha' : 'Senha do diário',
-                        helperText: 'Use pelo menos 10 caracteres.',
-                      ),
-                      onSubmitted: (_) => _submit(),
-                    ),
-                    if (creating) ...[
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _confirmation,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Repita a senha',
-                        ),
-                        onSubmitted: (_) => _submit(),
-                      ),
-                    ],
-                    if (_error != null) ...[
-                      const SizedBox(height: 12),
-                      Text(
-                        _error!,
-                        style: TextStyle(color: Theme.of(context).colorScheme.error),
-                      ),
-                      if (_hasVault == null)
-                        TextButton.icon(
-                          onPressed: _checkVault,
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Tentar novamente'),
-                        ),
-                    ],
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed: _busy || _hasVault == null ? null : _submit,
-                      icon: _busy
-                          ? const SizedBox.square(
-                              dimension: 18,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.lock_open),
-                      label: Text(
-                        creating ? 'Criar diário protegido' : 'Desbloquear',
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Bipolaris é um diário de autorreflexão, não um serviço clínico. '
-                      'Ele não faz diagnóstico, recomenda tratamento ou detecta crises.',
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            shrinkWrap: true,
+            children: [
+              const Icon(Icons.lock_outline, size: 48),
+              const SizedBox(height: 16),
+              Text(
+                creating ? 'Crie seu diário protegido' : 'Abra seu diário',
+                style: Theme.of(context).textTheme.headlineSmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'Seus registros são cifrados no dispositivo com uma senha que só '
+                'você conhece. Eles não são enviados ao Bipolaris, ao GitHub ou '
+                'a um profissional.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'A senha não pode ser recuperada. Exporte uma cópia de segurança '
+                'antes de trocar de navegador ou dispositivo. A cifra protege os '
+                'dados salvos, mas não protege um dispositivo desbloqueado ou '
+                'uma página comprometida.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                onPressed: () => Router.navigate(context, widget.onOpenPrivacy),
+                icon: const Icon(Icons.privacy_tip_outlined),
+                label: const Text('Privacidade e uso'),
+              ),
+              const SizedBox(height: 24),
+              TextField(
+                controller: _passphrase,
+                obscureText: true,
+                autofillHints: const [AutofillHints.password],
+                decoration: InputDecoration(
+                  labelText: creating ? 'Crie uma senha' : 'Senha do diário',
+                  helperText: 'Use pelo menos 10 caracteres.',
+                ),
+                onSubmitted: (_) => _submit(),
+              ),
+              if (creating) ...[
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _confirmation,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Repita a senha',
+                  ),
+                  onSubmitted: (_) => _submit(),
+                ),
+              ],
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  _error!,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                if (_hasVault == null)
+                  TextButton.icon(
+                    onPressed: _checkVault,
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Tentar novamente'),
+                  ),
+              ],
+              const SizedBox(height: 20),
+              FilledButton.icon(
+                onPressed: _busy || _hasVault == null ? null : _submit,
+                icon: _busy
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.lock_open),
+                label: Text(
+                  creating ? 'Criar diário protegido' : 'Desbloquear',
                 ),
               ),
-            ),
-          );
-        }
-      }
-      
-      class JournalPage extends StatefulWidget {
-        const JournalPage({
-          required this.session,
-          required this.initialEntries,
-          required this.onLock,
-          required this.onOpenPrivacy,
-          super.key,
-        });
-      
-        final ExpenseVaultSession session;
-        final List<ExpenseEntry> initialEntries;
-        final VoidCallback onLock;
-        final VoidCallback onOpenPrivacy;
-      
-        @override
-        State<JournalPage> createState() => _JournalPageState();
-      }
-      
-      class _JournalPageState extends State<JournalPage> {
-        late List<ExpenseEntry> _entries;
-        bool _saving = false;
-        String _periodFilter = 'all';
-        String _categoryFilter = '__all__';
-        int _selectedDestination = 0;
-      
-        @override
-        void initState() {
-          super.initState();
-          _entries = [...widget.initialEntries]
-            ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
-        }
-      
-        Future<void> _saveEntries(List<ExpenseEntry> next) async {
-          setState(() => _saving = true);
-          try {
-            await widget.session.save(next);
-            if (!mounted) return;
-            setState(() {
-              _entries = [...next]
-                ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
-              _saving = false;
-            });
-          } catch (_) {
-            if (!mounted) return;
-            setState(() => _saving = false);
-            _message('Não foi possível salvar. Mantenha uma cópia de segurança.');
-          }
-        }
-      
-        Future<void> _editEntry([ExpenseEntry? existing]) async {
-          final isWide = MediaQuery.sizeOf(context).width >= 600;
-          final result = isWide
-              ? await showDialog<ExpenseEntry>(
-                  context: context,
-                  builder: (_) => Dialog(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 600, maxHeight: 760),
-                      child: _ExpenseForm(existing: existing),
-                    ),
-                  ),
-                )
-              : await showModalBottomSheet<ExpenseEntry>(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  builder: (_) => _ExpenseForm(existing: existing),
-                );
-          if (result == null || !mounted) return;
-          final next = [..._entries];
-          final index = next.indexWhere((entry) => entry.id == result.id);
-          if (index < 0) {
-            next.add(result);
-          } else {
-            next[index] = result;
-          }
-          await _saveEntries(next);
-        }
-      
-        Future<void> _deleteEntry(ExpenseEntry entry) async {
-          final confirmed =
-              await showDialog<bool>(
-                context: context,
-                builder: (dialogContext) => AlertDialog(
-                  title: const Text('Apagar este registro?'),
-                  content: const Text('A ação não pode ser desfeita.'),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(dialogContext, false),
-                      child: const Text('Cancelar'),
-                    ),
-                    FilledButton(
-                      onPressed: () => Navigator.pop(dialogContext, true),
-                      child: const Text('Apagar'),
-                    ),
-                  ],
-                ),
-              ) ??
-              false;
-          if (confirmed && mounted) {
-            await _saveEntries(
-              _entries.where((candidate) => candidate.id != entry.id).toList(),
-            );
-          }
-        }
-      
-        Future<void> _deleteAll() async {
-          final confirmed =
-              await showDialog<bool>(
-                context: context,
-                builder: (dialogContext) => AlertDialog(
-                  title: const Text('Apagar todos os registros?'),
-                  content: const Text(
-                    'Todos os gastos e reflexões deste diário serão apagados do '
-                    'armazenamento local.',
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(dialogContext, false),
-                      child: const Text('Cancelar'),
-                    ),
-                    FilledButton(
-                      onPressed: () => Navigator.pop(dialogContext, true),
-                      child: const Text('Apagar tudo'),
-                    ),
-                  ],
-                ),
-              ) ??
-              false;
-          if (confirmed && mounted) await _saveEntries([]);
-        }
-      
-        Future<void> _export() async {
-          final plainJson = const JsonEncoder.withIndent('  ').convert({
-            'format': 'bipolaris-journal-v1',
-            'exportedAt': DateTime.now().toIso8601String(),
-            'entries': _entries.map((entry) => entry.toJson()).toList(),
-          });
-          await showDialog<void>(
+              const SizedBox(height: 16),
+              const Text(
+                'Bipolaris é um diário de autorreflexão, não um serviço clínico. '
+                'Ele não faz diagnóstico, recomenda tratamento ou detecta crises.',
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class JournalPage extends StatefulWidget {
+  const JournalPage({
+    required this.session,
+    required this.initialEntries,
+    required this.onLock,
+    required this.onOpenPrivacy,
+    super.key,
+  });
+
+  final ExpenseVaultSession session;
+  final List<ExpenseEntry> initialEntries;
+  final VoidCallback onLock;
+  final VoidCallback onOpenPrivacy;
+
+  @override
+  State<JournalPage> createState() => _JournalPageState();
+}
+
+class _JournalPageState extends State<JournalPage> {
+  late List<ExpenseEntry> _entries;
+  bool _saving = false;
+  String _periodFilter = 'all';
+  String _categoryFilter = '__all__';
+  int _selectedDestination = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _entries = [...widget.initialEntries]
+      ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
+  }
+
+  Future<void> _saveEntries(List<ExpenseEntry> next) async {
+    setState(() => _saving = true);
+    try {
+      await widget.session.save(next);
+      if (!mounted) return;
+      setState(() {
+        _entries = [...next]
+          ..sort((a, b) => b.purchasedAt.compareTo(a.purchasedAt));
+        _saving = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      _message('Não foi possível salvar. Mantenha uma cópia de segurança.');
+    }
+  }
+
+  Future<void> _editEntry([ExpenseEntry? existing]) async {
+    final isWide = MediaQuery.sizeOf(context).width >= 600;
+    final result = isWide
+        ? await showDialog<ExpenseEntry>(
             context: context,
-            builder: (dialogContext) => AlertDialog(
-              title: const Text('Exportar cópia JSON'),
-              content: SizedBox(
-                width: 560,
-                child: SingleChildScrollView(
-                  child: SelectableText(
-                    'Este arquivo não está cifrado. Guarde-o em local privado.\n\n'
-                    '$plainJson',
-                  ),
+            builder: (_) => Dialog(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600, maxHeight: 760),
+                child: _ExpenseForm(existing: existing),
+              ),
+            ),
+          )
+        : await showModalBottomSheet<ExpenseEntry>(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            builder: (_) => _ExpenseForm(existing: existing),
+          );
+    if (result == null || !mounted) return;
+    final next = [..._entries];
+    final index = next.indexWhere((entry) => entry.id == result.id);
+    if (index < 0) {
+      next.add(result);
+    } else {
+      next[index] = result;
+    }
+    await _saveEntries(next);
+  }
+
+  Future<void> _deleteEntry(ExpenseEntry entry) async {
+    final confirmed =
+        await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Apagar este registro?'),
+            content: const Text('A ação não pode ser desfeita.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: const Text('Apagar'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+    if (confirmed && mounted) {
+      await _saveEntries(
+        _entries.where((candidate) => candidate.id != entry.id).toList(),
+      );
+    }
+  }
+
+  Future<void> _deleteAll() async {
+    final confirmed =
+        await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text('Apagar todos os registros?'),
+            content: const Text(
+              'Todos os gastos e reflexões deste diário serão apagados do '
+              'armazenamento local.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, true),
+                child: const Text('Apagar tudo'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+    if (confirmed && mounted) await _saveEntries([]);
+  }
+
+  Future<void> _export() async {
+    final plainJson = const JsonEncoder.withIndent('  ').convert({
+      'format': 'bipolaris-journal-v1',
+      'exportedAt': DateTime.now().toIso8601String(),
+      'entries': _entries.map((entry) => entry.toJson()).toList(),
+    });
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Exportar cópia JSON'),
+        content: SizedBox(
+          width: 560,
+          child: SingleChildScrollView(
+            child: SelectableText(
+              'Este arquivo não está cifrado. Guarde-o em local privado.\n\n'
+              '$plainJson',
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Fechar'),
+          ),
+          FilledButton.icon(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: plainJson));
+              if (dialogContext.mounted) Navigator.pop(dialogContext);
+              _message('Cópia JSON copiada para a área de transferência.');
+            },
+            icon: const Icon(Icons.copy),
+            label: const Text('Copiar JSON'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _message(String value) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(value)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final last30DaysStart = today.subtract(const Duration(days: 29));
+    final categories = _entries.map((entry) => entry.category).toSet().toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    final visibleEntries = _entries.where((entry) {
+      final date = entry.purchasedAt;
+      final matchesPeriod = switch (_periodFilter) {
+        'month' => date.year == now.year && date.month == now.month,
+        '30days' => !date.isBefore(last30DaysStart) && !date.isAfter(now),
+        _ => true,
+      };
+      final matchesCategory =
+          _categoryFilter == '__all__' || entry.category == _categoryFilter;
+      return matchesPeriod && matchesCategory;
+    }).toList();
+    final periodLabel = switch (_periodFilter) {
+      'month' => 'este mês',
+      '30days' => 'últimos 30 dias',
+      _ => 'todo o período',
+    };
+    final total = visibleEntries.fold<int>(
+      0,
+      (sum, entry) => sum + entry.amountCents,
+    );
+    final groups = <String, List<ExpenseEntry>>{};
+    for (final entry in visibleEntries) {
+      final state = entry.selfReportedState?.trim();
+      if (state != null && state.isNotEmpty) {
+        groups.putIfAbsent(state, () => []).add(entry);
+      }
+    }
+    final sortedGroups = groups.entries.toList()
+      ..sort((a, b) => a.key.toLowerCase().compareTo(b.key.toLowerCase()));
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Bipolaris'),
+        actions: [
+          IconButton(
+            tooltip: 'Exportar cópia JSON',
+            onPressed: _entries.isEmpty ? null : _export,
+            icon: const Icon(Icons.download_outlined),
+          ),
+          PopupMenuButton<String>(
+            tooltip: 'Opções do diário',
+            onSelected: (value) {
+              if (value == 'delete') _deleteAll();
+              if (value == 'lock') widget.onLock();
+              if (value == 'privacy') widget.onOpenPrivacy();
+            },
+            itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: 'privacy',
+                child: ListTile(
+                  leading: Icon(Icons.privacy_tip_outlined),
+                  title: Text('Privacidade e uso'),
                 ),
               ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('Fechar'),
+              PopupMenuItem(
+                value: 'delete',
+                child: ListTile(
+                  leading: Icon(Icons.delete_outline),
+                  title: Text('Apagar todos os registros'),
                 ),
-                FilledButton.icon(
-                  onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: plainJson));
-                    if (dialogContext.mounted) Navigator.pop(dialogContext);
-                    _message('Cópia JSON copiada para a área de transferência.');
-                  },
-                  icon: const Icon(Icons.copy),
-                  label: const Text('Copiar JSON'),
+              ),
+              PopupMenuItem(
+                value: 'lock',
+                child: ListTile(
+                  leading: Icon(Icons.lock_outline),
+                  title: Text('Bloquear diário'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _saving ? null : () => _editEntry(),
+        icon: const Icon(Icons.add),
+        label: const Text('Registrar gasto'),
+      ),
+      bottomNavigationBar: MediaQuery.sizeOf(context).width < 600
+          ? NavigationBar(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: 'Resumo',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: 'Registros',
+                ),
+              ],
+            )
+          : null,
+      body: Row(
+        children: [
+          if (MediaQuery.sizeOf(context).width >= 600)
+            NavigationRail(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              labelType: NavigationRailLabelType.all,
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: Text('Resumo'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: Text('Registros'),
                 ),
               ],
             ),
-          );
-        }
-      
-        void _message(String value) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(value)));
-        }
-      
-        @override
-        Widget build(BuildContext context) {
-          final now = DateTime.now();
-          final today = DateTime(now.year, now.month, now.day);
-          final last30DaysStart = today.subtract(const Duration(days: 29));
-          final categories = _entries.map((entry) => entry.category).toSet().toList()
-            ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-          final visibleEntries = _entries.where((entry) {
-            final date = entry.purchasedAt;
-            final matchesPeriod = switch (_periodFilter) {
-              'month' => date.year == now.year && date.month == now.month,
-              '30days' => !date.isBefore(last30DaysStart) && !date.isAfter(now),
-              _ => true,
-            };
-            final matchesCategory =
-                _categoryFilter == '__all__' || entry.category == _categoryFilter;
-            return matchesPeriod && matchesCategory;
-          }).toList();
-          final periodLabel = switch (_periodFilter) {
-            'month' => 'este mês',
-            '30days' => 'últimos 30 dias',
-            _ => 'todo o período',
-          };
-          final total = visibleEntries.fold<int>(
-            0,
-            (sum, entry) => sum + entry.amountCents,
-          );
-          final groups = <String, List<ExpenseEntry>>{};
-          for (final entry in visibleEntries) {
-            final state = entry.selfReportedState?.trim();
-            if (state != null && state.isNotEmpty) {
-              groups.putIfAbsent(state, () => []).add(entry);
-            }
-          }
-          final sortedGroups = groups.entries.toList()
-            ..sort((a, b) => a.key.toLowerCase().compareTo(b.key.toLowerCase()));
-      
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Bipolaris'),
-              actions: [
-                IconButton(
-                  tooltip: 'Exportar cópia JSON',
-                  onPressed: _entries.isEmpty ? null : _export,
-                  icon: const Icon(Icons.download_outlined),
-                ),
-                PopupMenuButton<String>(
-                  tooltip: 'Opções do diário',
-                  onSelected: (value) {
-                    if (value == 'delete') _deleteAll();
-                    if (value == 'lock') widget.onLock();
-                    if (value == 'privacy') widget.onOpenPrivacy();
-                  },
-                  itemBuilder: (_) => const [
-                    PopupMenuItem(
-                      value: 'privacy',
-                      child: ListTile(
-                        leading: Icon(Icons.privacy_tip_outlined),
-                        title: Text('Privacidade e uso'),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: ListTile(
-                        leading: Icon(Icons.delete_outline),
-                        title: Text('Apagar todos os registros'),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 'lock',
-                      child: ListTile(
-                        leading: Icon(Icons.lock_outline),
-                        title: Text('Bloquear diário'),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: _saving ? null : () => _editEntry(),
-              icon: const Icon(Icons.add),
-              label: const Text('Registrar gasto'),
-            ),
-            bottomNavigationBar: MediaQuery.sizeOf(context).width < 600
-                ? NavigationBar(
-                    selectedIndex: _selectedDestination,
-                    onDestinationSelected: (index) =>
-                        setState(() => _selectedDestination = index),
-                    destinations: const [
-                      NavigationDestination(
-                        icon: Icon(Icons.dashboard_outlined),
-                        selectedIcon: Icon(Icons.dashboard),
-                        label: 'Resumo',
-                      ),
-                      NavigationDestination(
-                        icon: Icon(Icons.receipt_long_outlined),
-                        selectedIcon: Icon(Icons.receipt_long),
-                        label: 'Registros',
-                      ),
-                    ],
-                  )
-                : null,
-            body: Row(
-              children: [
-                if (MediaQuery.sizeOf(context).width >= 600)
-                  NavigationRail(
-                    selectedIndex: _selectedDestination,
-                    onDestinationSelected: (index) =>
-                        setState(() => _selectedDestination = index),
-                    labelType: NavigationRailLabelType.all,
-                    destinations: const [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.dashboard_outlined),
-                        selectedIcon: Icon(Icons.dashboard),
-                        label: Text('Resumo'),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.receipt_long_outlined),
-                        selectedIcon: Icon(Icons.receipt_long),
-                        label: Text('Registros'),
-                      ),
-                    ],
-                  ),
-                Expanded(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 820),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 820),
                 child: ListView(
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
                   children: [
