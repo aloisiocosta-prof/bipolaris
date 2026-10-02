@@ -31,9 +31,7 @@ void main() {
     tester,
   ) async {
     final now = DateTime.now();
-    final session = await ExpenseVault(
-      storage: MemoryStringStore(),
-    ).create('senha de teste');
+    final session = _FakeSession();
     final entries = [
       ExpenseEntry(
         id: 'today-food',
@@ -93,9 +91,7 @@ void main() {
   testWidgets('reflection form offers optional self-report choices', (
     tester,
   ) async {
-    final session = await ExpenseVault(
-      storage: MemoryStringStore(),
-    ).create('senha de teste');
+    final session = _FakeSession();
     await tester.pumpWidget(
       MaterialApp(
         theme: BipolarisTheme.light(),
@@ -124,4 +120,12 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
   });
+}
+
+class _FakeSession implements ExpenseVaultSession {
+  @override
+  Future<void> destroy() async {}
+
+  @override
+  Future<void> save(List<ExpenseEntry> entries) async {}
 }
