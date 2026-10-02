@@ -84,6 +84,8 @@ void main() {
 
     expect(find.text('R\$ 10,00'), findsAtLeastNWidgets(1));
     expect(find.text('1'), findsOneWidget);
+    await tester.drag(find.byType(ListView), const Offset(0, -500));
+    await tester.pumpAndSettle();
     expect(find.text('Tranquilo(a)'), findsOneWidget);
     expect(find.text('Preocupado(a)'), findsNothing);
   });
