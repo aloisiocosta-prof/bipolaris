@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'models/expense_entry.dart';
 import 'services/expense_vault.dart';
+import 'theme/bipolaris_theme.dart';
 
 void main() => runApp(const BipolarisApp());
 
@@ -16,16 +17,7 @@ class BipolarisApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'Bipolaris — diário financeiro reflexivo',
-    theme: ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF365A8C),
-        brightness: Brightness.light,
-      ),
-      useMaterial3: true,
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
-      ),
-    ),
+    theme: BipolarisTheme.light(),
     home: VaultGate(vault: vault),
   );
 }
@@ -252,6 +244,8 @@ class JournalPage extends StatefulWidget {
 class _JournalPageState extends State<JournalPage> {
   late List<ExpenseEntry> _entries;
   bool _saving = false;
+  String _periodFilter = 'all';
+  String _categoryFilter = '__all__';
 
   @override
   void initState() {
@@ -394,12 +388,33 @@ class _JournalPageState extends State<JournalPage> {
 
   @override
   Widget build(BuildContext context) {
-    final total = _entries.fold<int>(
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final last30DaysStart = today.subtract(const Duration(days: 29));
+    final categories = _entries.map((entry) => entry.category).toSet().toList()
+      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    final visibleEntries = _entries.where((entry) {
+      final date = entry.purchasedAt;
+      final matchesPeriod = switch (_periodFilter) {
+        'month' => date.year == now.year && date.month == now.month,
+        '30days' => !date.isBefore(last30DaysStart) && !date.isAfter(now),
+        _ => true,
+      };
+      final matchesCategory =
+          _categoryFilter == '__all__' || entry.category == _categoryFilter;
+      return matchesPeriod && matchesCategory;
+    }).toList();
+    final periodLabel = switch (_periodFilter) {
+      'month' => 'este mês',
+      '30days' => 'últimos 30 dias',
+      _ => 'todo o período',
+    };
+    final total = visibleEntries.fold<int>(
       0,
       (sum, entry) => sum + entry.amountCents,
     );
     final groups = <String, List<ExpenseEntry>>{};
-    for (final entry in _entries) {
+    for (final entry in visibleEntries) {
       final state = entry.selfReportedState?.trim();
       if (state != null && state.isNotEmpty) {
         groups.putIfAbsent(state, () => []).add(entry);
@@ -474,19 +489,78 @@ class _JournalPageState extends State<JournalPage> {
                 ),
               ),
               const SizedBox(height: 12),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Explorar registros',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 12),
+                      Semantics(
+                        label: 'Filtrar registros por período',
+                        child: SegmentedButton<String>(
+                          segments: const [
+                            ButtonSegment(value: 'all', label: Text('Tudo')),
+                            ButtonSegment(value: 'month', label: Text('Este mês')),
+                            ButtonSegment(value: '30days', label: Text('30 dias')),
+                          ],
+                          selected: {_periodFilter},
+                          onSelectionChanged: (selection) =>
+                              setState(() => _periodFilter = selection.first),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      InputDecorator(
+                        decoration: const InputDecoration(
+                          labelText: 'Categoria',
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            value: _categoryFilter,
+                            items: [
+                              const DropdownMenuItem(
+                                value: '__all__',
+                                child: Text('Todas as categorias'),
+                              ),
+                              ...categories.map(
+                                (category) => DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              if (value != null) {
+                                setState(() => _categoryFilter = value);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(
                     child: _SummaryCard(
-                      title: 'Total registrado',
+                      title: 'Total • $periodLabel',
                       value: ExpenseEntry.formatMoney(total),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: _SummaryCard(
-                      title: 'Registros',
-                      value: _entries.length.toString(),
+                      title: 'Registros exibidos',
+                      value: visibleEntries.length.toString(),
                     ),
                   ),
                 ],
@@ -527,18 +601,37 @@ class _JournalPageState extends State<JournalPage> {
               ),
               if (_saving)
                 const LinearProgressIndicator()
-              else if (_entries.isEmpty)
-                const Card(
+              else if (visibleEntries.isEmpty)
+                Card(
                   child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text(
-                      'Seu diário está vazio. Toque em “Registrar gasto” para '
-                      'anotar uma compra; as perguntas de reflexão são opcionais.',
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _entries.isEmpty
+                              ? 'Seu diário está vazio. Toque em “Registrar gasto” para anotar uma compra.'
+                              : 'Nenhum registro corresponde a estes filtros.',
+                        ),
+                        if (_entries.isEmpty) ...[
+                          const SizedBox(height: 4),
+                          const Text('As perguntas de reflexão são opcionais.'),
+                        ] else ...[
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () => setState(() {
+                              _periodFilter = 'all';
+                              _categoryFilter = '__all__';
+                            }),
+                            child: const Text('Limpar filtros'),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
                 )
               else
-                ..._entries.map(
+                ...visibleEntries.map(
                   (entry) => Card(
                     child: ListTile(
                       leading: Icon(
@@ -644,6 +737,27 @@ class _ExpenseFormState extends State<_ExpenseForm> {
   late final TextEditingController _reflection;
   late DateTime _purchasedAt;
   late bool _planned;
+  String? _stateChoice;
+  String? _motivationChoice;
+
+  static const _stateOptions = [
+    'Tranquilo(a)',
+    'Animado(a)',
+    'Preocupado(a)',
+    'Frustrado(a)',
+    'Triste',
+    'Cansado(a)',
+    'Outro / escrever',
+  ];
+  static const _motivationOptions = [
+    'Necessidade',
+    'Conveniência',
+    'Lazer ou celebração',
+    'Acolhimento pessoal',
+    'Influência de outras pessoas',
+    'Impulso',
+    'Outro / escrever',
+  ];
 
   @override
   void initState() {
@@ -658,8 +772,30 @@ class _ExpenseFormState extends State<_ExpenseForm> {
     );
     _category = TextEditingController(text: existing?.category ?? '');
     _description = TextEditingController(text: existing?.description ?? '');
-    _state = TextEditingController(text: existing?.selfReportedState ?? '');
-    _motivation = TextEditingController(text: existing?.motivation ?? '');
+    final existingState = existing?.selfReportedState;
+    final existingMotivation = existing?.motivation;
+    _stateChoice = existingState == null
+        ? null
+        : (_stateOptions.contains(existingState)
+              ? existingState
+              : 'Outro / escrever');
+    _motivationChoice = existingMotivation == null
+        ? null
+        : (_motivationOptions.contains(existingMotivation)
+              ? existingMotivation
+              : 'Outro / escrever');
+    _state = TextEditingController(
+      text: existingState != null && !_stateOptions.contains(existingState)
+          ? existingState
+          : '',
+    );
+    _motivation = TextEditingController(
+      text:
+          existingMotivation != null &&
+              !_motivationOptions.contains(existingMotivation)
+          ? existingMotivation
+          : '',
+    );
     _reflection = TextEditingController(text: existing?.reflection ?? '');
     _purchasedAt = existing?.purchasedAt ?? DateTime.now();
     _planned = existing?.planned ?? true;
@@ -703,8 +839,8 @@ class _ExpenseFormState extends State<_ExpenseForm> {
         category: _category.text.trim(),
         planned: _planned,
         description: optional(_description),
-        selfReportedState: optional(_state),
-        motivation: optional(_motivation),
+        selfReportedState: _choiceValue(_stateChoice, _state),
+        motivation: _choiceValue(_motivationChoice, _motivation),
         reflection: optional(_reflection),
       ),
     );
@@ -785,23 +921,46 @@ class _ExpenseFormState extends State<_ExpenseForm> {
                 'classifica sua resposta.',
               ),
               const SizedBox(height: 12),
-              TextFormField(
-                controller: _state,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(
-                  labelText: 'Como você se sentia?',
-                  hintText: 'Pode deixar em branco',
-                ),
+              _ChoiceQuestion(
+                title: 'Como você se sentia? (opcional)',
+                helper:
+                    'Escolha uma opção ou escreva a sua; estes rótulos são apenas sugestões.',
+                options: _stateOptions,
+                selected: _stateChoice,
+                onSelected: (value) => setState(() => _stateChoice = value),
               ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _motivation,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: const InputDecoration(
-                  labelText: 'O que motivou a compra?',
-                  hintText: 'Pode deixar em branco',
+              if (_stateChoice == 'Outro / escrever') ...[
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _state,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    labelText: 'Descreva seu estado',
+                    hintText: 'Com suas próprias palavras',
+                  ),
                 ),
+              ],
+              const SizedBox(height: 16),
+              _ChoiceQuestion(
+                title: 'O que motivou a compra? (opcional)',
+                helper:
+                    'As opções não classificam a compra nem avaliam você.',
+                options: _motivationOptions,
+                selected: _motivationChoice,
+                onSelected: (value) =>
+                    setState(() => _motivationChoice = value),
               ),
+              if (_motivationChoice == 'Outro / escrever') ...[
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _motivation,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    labelText: 'Descreva a motivação',
+                    hintText: 'Com suas próprias palavras',
+                  ),
+                ),
+              ],
               const SizedBox(height: 12),
               TextFormField(
                 controller: _description,
@@ -831,6 +990,57 @@ class _ExpenseFormState extends State<_ExpenseForm> {
       ),
     );
   }
+}
+
+class _ChoiceQuestion extends StatelessWidget {
+  const _ChoiceQuestion({
+    required this.title,
+    required this.helper,
+    required this.options,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final String title;
+  final String helper;
+  final List<String> options;
+  final String? selected;
+  final ValueChanged<String?> onSelected;
+
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(title, style: Theme.of(context).textTheme.titleSmall),
+      const SizedBox(height: 4),
+      Text(helper),
+      const SizedBox(height: 8),
+      Wrap(
+        spacing: 8,
+        runSpacing: 4,
+        children: options
+            .map(
+              (option) => ChoiceChip(
+                label: Text(option),
+                selected: selected == option,
+                onSelected: (checked) =>
+                    onSelected(checked ? option : null),
+              ),
+            )
+            .toList(),
+      ),
+    ],
+  );
+}
+
+String? _choiceValue(
+  String? choice,
+  TextEditingController customValue,
+) {
+  if (choice == null) return null;
+  if (choice != 'Outro / escrever') return choice;
+  final value = customValue.text.trim();
+  return value.isEmpty ? null : value;
 }
 
 String _formatDate(DateTime date) =>
