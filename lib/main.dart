@@ -400,7 +400,10 @@ class _JournalPageState extends State<JournalPage> {
             context: context,
             builder: (_) => Dialog(
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600, maxHeight: 760),
+                constraints: const BoxConstraints(
+                  maxWidth: 600,
+                  maxHeight: 760,
+                ),
                 child: _ExpenseForm(existing: existing),
               ),
             ),
@@ -673,69 +676,75 @@ class _JournalPageState extends State<JournalPage> {
                     const SizedBox(height: 12),
                     if (_selectedDestination == 1)
                       Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Explorar registros',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            const SizedBox(height: 12),
-                            Semantics(
-                              label: 'Filtrar registros por período',
-                              child: SegmentedButton<String>(
-                                segments: const [
-                                  ButtonSegment(value: 'all', label: Text('Tudo')),
-                                  ButtonSegment(
-                                    value: 'month',
-                                    label: Text('Este mês'),
-                                  ),
-                                  ButtonSegment(
-                                    value: '30days',
-                                    label: Text('30 dias'),
-                                  ),
-                                ],
-                                selected: {_periodFilter},
-                                onSelectionChanged: (selection) =>
-                                    setState(() => _periodFilter = selection.first),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Explorar registros',
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            InputDecorator(
-                              decoration: const InputDecoration(
-                                labelText: 'Categoria',
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
-                                  isExpanded: true,
-                                  value: _categoryFilter,
-                                  items: [
-                                    const DropdownMenuItem(
-                                      value: '__all__',
-                                      child: Text('Todas as categorias'),
+                              const SizedBox(height: 12),
+                              Semantics(
+                                label: 'Filtrar registros por período',
+                                child: SegmentedButton<String>(
+                                  segments: const [
+                                    ButtonSegment(
+                                      value: 'all',
+                                      label: Text('Tudo'),
                                     ),
-                                    ...categories.map(
-                                      (category) => DropdownMenuItem(
-                                        value: category,
-                                        child: Text(category),
-                                      ),
+                                    ButtonSegment(
+                                      value: 'month',
+                                      label: Text('Este mês'),
+                                    ),
+                                    ButtonSegment(
+                                      value: '30days',
+                                      label: Text('30 dias'),
                                     ),
                                   ],
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      setState(() => _categoryFilter = value);
-                                    }
-                                  },
+                                  selected: {_periodFilter},
+                                  onSelectionChanged: (selection) => setState(
+                                    () => _periodFilter = selection.first,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 12),
+                              InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: 'Categoria',
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    value: _categoryFilter,
+                                    items: [
+                                      const DropdownMenuItem(
+                                        value: '__all__',
+                                        child: Text('Todas as categorias'),
+                                      ),
+                                      ...categories.map(
+                                        (category) => DropdownMenuItem(
+                                          value: category,
+                                          child: Text(category),
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        setState(() => _categoryFilter = value);
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(height: 12),
                     LayoutBuilder(
                       builder: (context, constraints) {
@@ -765,7 +774,8 @@ class _JournalPageState extends State<JournalPage> {
                         );
                       },
                     ),
-                    if (_selectedDestination == 1 && sortedGroups.isNotEmpty) ...[
+                    if (_selectedDestination == 1 &&
+                        sortedGroups.isNotEmpty) ...[
                       const SizedBox(height: 20),
                       Text(
                         'Soma dos gastos por estado que você descreveu',
@@ -789,14 +799,18 @@ class _JournalPageState extends State<JournalPage> {
                               '${group.value.length} '
                               '${group.value.length == 1 ? 'registro' : 'registros'}',
                             ),
-                            trailing: Text(ExpenseEntry.formatMoney(groupTotal)),
+                            trailing: Text(
+                              ExpenseEntry.formatMoney(groupTotal),
+                            ),
                           ),
                         );
                       }),
                     ],
                     const SizedBox(height: 20),
                     Text(
-                      _selectedDestination == 0 ? 'Registros recentes' : 'Seus gastos',
+                      _selectedDestination == 0
+                          ? 'Registros recentes'
+                          : 'Seus gastos',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     if (_saving)
@@ -815,7 +829,9 @@ class _JournalPageState extends State<JournalPage> {
                               ),
                               if (_entries.isEmpty) ...[
                                 const SizedBox(height: 4),
-                                const Text('As perguntas de reflexão são opcionais.'),
+                                const Text(
+                                  'As perguntas de reflexão são opcionais.',
+                                ),
                               ] else ...[
                                 const SizedBox(height: 8),
                                 TextButton(
@@ -832,42 +848,52 @@ class _JournalPageState extends State<JournalPage> {
                       )
                     else
                       ...(_selectedDestination == 0
-                          ? visibleEntries.take(3)
-                          : visibleEntries).map(
-                        (entry) => Card(
-                          child: ListTile(
-                            leading: Icon(
-                              entry.planned
-                                  ? Icons.event_available_outlined
-                                  : Icons.event_busy_outlined,
-                            ),
-                            title: Text(
-                              '${entry.category} • '
-                              '${ExpenseEntry.formatMoney(entry.amountCents)}',
-                            ),
-                            subtitle: Text(_entrySummary(entry)),
-                            isThreeLine: _entrySummary(entry).contains('\n'),
-                            onTap: () => _editEntry(entry),
-                            trailing: PopupMenuButton<String>(
-                              tooltip: 'Ações do registro',
-                              onSelected: (action) {
-                                if (action == 'edit') _editEntry(entry);
-                                if (action == 'delete') _deleteEntry(entry);
-                              },
-                              itemBuilder: (_) => const [
-                                PopupMenuItem(value: 'edit', child: Text('Editar')),
-                                PopupMenuItem(value: 'delete', child: Text('Apagar')),
-                              ],
+                              ? visibleEntries.take(3)
+                              : visibleEntries)
+                          .map(
+                            (entry) => Card(
+                              child: ListTile(
+                                leading: Icon(
+                                  entry.planned
+                                      ? Icons.event_available_outlined
+                                      : Icons.event_busy_outlined,
+                                ),
+                                title: Text(
+                                  '${entry.category} • '
+                                  '${ExpenseEntry.formatMoney(entry.amountCents)}',
+                                ),
+                                subtitle: Text(_entrySummary(entry)),
+                                isThreeLine: _entrySummary(
+                                  entry,
+                                ).contains('\n'),
+                                onTap: () => _editEntry(entry),
+                                trailing: PopupMenuButton<String>(
+                                  tooltip: 'Ações do registro',
+                                  onSelected: (action) {
+                                    if (action == 'edit') _editEntry(entry);
+                                    if (action == 'delete') _deleteEntry(entry);
+                                  },
+                                  itemBuilder: (_) => const [
+                                    PopupMenuItem(
+                                      value: 'edit',
+                                      child: Text('Editar'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Apagar'),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
                     const SizedBox(height: 12),
                     if (_selectedDestination == 0 && visibleEntries.length > 3)
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton.icon(
-                          onPressed: () => setState(() => _selectedDestination = 1),
+                          onPressed: () =>
+                              setState(() => _selectedDestination = 1),
                           icon: const Icon(Icons.receipt_long_outlined),
                           label: const Text('Ver todos os registros'),
                         ),
