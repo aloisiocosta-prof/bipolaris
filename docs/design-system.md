@@ -88,7 +88,7 @@ Referências oficiais consultadas:
 
 O alvo Web do Bipolaris é uma aplicação interativa Flutter de página única: a shell HTML carrega o app e as telas mudam no cliente. A navegação usa o `Router` do Flutter SDK para manter rota, histórico e endereço sincronizados. A abertura da tela de privacidade usa `Router.navigate` para criar uma entrada no histórico; o caminho da privacidade é `/#/privacy` no navegador, compatível com o hosting estático do GitHub Pages. O parser também aceita `/privacy` para links profundos nas plataformas nativas.
 
-A interface segue mobile-first: a estrutura padrão usa uma coluna, largura integral com margens de 16 dp, conteúdo rolável e controles Material 3 com alvos de toque ampliados. Quando há mais espaço, componentes podem se expandir com base nas restrições recebidas por `LayoutBuilder`; os cartões de resumo empilham abaixo de 600 dp e ficam lado a lado a partir desse ponto. O ponto de quebra é baseado na largura disponível, não no tipo ou nome do dispositivo.
+A interface segue mobile-first: a estrutura padrão usa uma coluna, largura integral com margens de 16 dp, conteúdo rolável e controles Material 3 com alvos de toque ampliados. Quando há mais espaço, componentes podem se expandir com base nas restrições recebidas por `LayoutBuilder`; os cartões de resumo empilham abaixo de 600 dp e ficam lado a lado a partir desse ponto. O ponto de quebra é baseado na largura disponível, não no tipo ou nome do dispositivo. A navegação usa `NavigationBar` abaixo de 600 dp e `NavigationRail` a partir de 600 dp. A escolha A+B mantém “Resumo” (resumo e até três registros recentes) e “Registros” (filtros e histórico) como destinos separados; “Registrar gasto” permanece acessível nos dois. No celular, o formulário abre como painel inferior rolável; em janelas mais largas, abre em diálogo com largura limitada. Esses pontos de adaptação seguem a largura disponível, não o tipo de dispositivo.
 
 Critérios para cada tela nova:
 - Primeiro, validar fluxo, leitura e interação em 320–390 dp; depois ampliar para tablet e desktop.
@@ -105,4 +105,5 @@ Referências técnicas:
 - Flutter. Deep linking. https://docs.flutter.dev/ui/navigation/deep-linking
 - Flutter. Configuring the URL strategy on the web. https://docs.flutter.dev/ui/navigation/url-strategies
 - Flutter. General approach to adaptive apps. https://docs.flutter.dev/ui/adaptive-responsive/general
+- Flutter. Adaptive navigation and navigation rail. https://docs.flutter.dev/ui/adaptive-responsive/best-practices
 - web.dev. Responsive web design basics. https://web.dev/articles/responsive-web-design-basics
