@@ -505,8 +505,14 @@ class _JournalPageState extends State<JournalPage> {
                         child: SegmentedButton<String>(
                           segments: const [
                             ButtonSegment(value: 'all', label: Text('Tudo')),
-                            ButtonSegment(value: 'month', label: Text('Este mês')),
-                            ButtonSegment(value: '30days', label: Text('30 dias')),
+                            ButtonSegment(
+                              value: 'month',
+                              label: Text('Este mês'),
+                            ),
+                            ButtonSegment(
+                              value: '30days',
+                              label: Text('30 dias'),
+                            ),
                           ],
                           selected: {_periodFilter},
                           onSelectionChanged: (selection) =>
