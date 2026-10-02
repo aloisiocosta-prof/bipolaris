@@ -367,6 +367,7 @@ class _JournalPageState extends State<JournalPage> {
   bool _saving = false;
   String _periodFilter = 'all';
   String _categoryFilter = '__all__';
+  int _selectedDestination = 0;
 
   @override
   void initState() {
@@ -393,12 +394,26 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<void> _editEntry([ExpenseEntry? existing]) async {
-    final result = await showModalBottomSheet<ExpenseEntry>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      builder: (_) => _ExpenseForm(existing: existing),
-    );
+    final isWide = MediaQuery.sizeOf(context).width >= 600;
+    final result = isWide
+        ? await showDialog<ExpenseEntry>(
+            context: context,
+            builder: (_) => Dialog(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 600,
+                  maxHeight: 760,
+                ),
+                child: _ExpenseForm(existing: existing),
+              ),
+            ),
+          )
+        : await showModalBottomSheet<ExpenseEntry>(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            builder: (_) => _ExpenseForm(existing: existing),
+          );
     if (result == null || !mounted) return;
     final next = [..._entries];
     final index = next.indexWhere((entry) => entry.id == result.id);
@@ -591,235 +606,314 @@ class _JournalPageState extends State<JournalPage> {
         icon: const Icon(Icons.add),
         label: const Text('Registrar gasto'),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 820),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-            children: [
-              Card(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Um diário para observar seus próprios registros',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Anote um gasto e, se quiser, descreva o que sentia e '
-                        'o que motivou a compra. Você controla o que registra.',
-                      ),
-                    ],
-                  ),
+      bottomNavigationBar: MediaQuery.sizeOf(context).width < 600
+          ? NavigationBar(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: 'Resumo',
                 ),
-              ),
-              const SizedBox(height: 12),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Explorar registros',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 12),
-                      Semantics(
-                        label: 'Filtrar registros por período',
-                        child: SegmentedButton<String>(
-                          segments: const [
-                            ButtonSegment(value: 'all', label: Text('Tudo')),
-                            ButtonSegment(
-                              value: 'month',
-                              label: Text('Este mês'),
+                NavigationDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: 'Registros',
+                ),
+              ],
+            )
+          : null,
+      body: Row(
+        children: [
+          if (MediaQuery.sizeOf(context).width >= 600)
+            NavigationRail(
+              selectedIndex: _selectedDestination,
+              onDestinationSelected: (index) =>
+                  setState(() => _selectedDestination = index),
+              labelType: NavigationRailLabelType.all,
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.dashboard_outlined),
+                  selectedIcon: Icon(Icons.dashboard),
+                  label: Text('Resumo'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.receipt_long_outlined),
+                  selectedIcon: Icon(Icons.receipt_long),
+                  label: Text('Registros'),
+                ),
+              ],
+            ),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 820),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+                  children: [
+                    Card(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Um diário para observar seus próprios registros',
+                              style: Theme.of(context).textTheme.titleLarge,
                             ),
-                            ButtonSegment(
-                              value: '30days',
-                              label: Text('30 dias'),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Anote um gasto e, se quiser, descreva o que sentia e '
+                              'o que motivou a compra. Você controla o que registra.',
                             ),
                           ],
-                          selected: {_periodFilter},
-                          onSelectionChanged: (selection) =>
-                              setState(() => _periodFilter = selection.first),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Categoria',
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12),
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: _categoryFilter,
-                            items: [
-                              const DropdownMenuItem(
-                                value: '__all__',
-                                child: Text('Todas as categorias'),
+                    ),
+                    const SizedBox(height: 12),
+                    if (_selectedDestination == 1)
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Explorar registros',
+                                style: Theme.of(context).textTheme.titleMedium,
                               ),
-                              ...categories.map(
-                                (category) => DropdownMenuItem(
-                                  value: category,
-                                  child: Text(category),
+                              const SizedBox(height: 12),
+                              Semantics(
+                                label: 'Filtrar registros por período',
+                                child: SegmentedButton<String>(
+                                  segments: const [
+                                    ButtonSegment(
+                                      value: 'all',
+                                      label: Text('Tudo'),
+                                    ),
+                                    ButtonSegment(
+                                      value: 'month',
+                                      label: Text('Este mês'),
+                                    ),
+                                    ButtonSegment(
+                                      value: '30days',
+                                      label: Text('30 dias'),
+                                    ),
+                                  ],
+                                  selected: {_periodFilter},
+                                  onSelectionChanged: (selection) => setState(
+                                    () => _periodFilter = selection.first,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              InputDecorator(
+                                decoration: const InputDecoration(
+                                  labelText: 'Categoria',
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton<String>(
+                                    isExpanded: true,
+                                    value: _categoryFilter,
+                                    items: [
+                                      const DropdownMenuItem(
+                                        value: '__all__',
+                                        child: Text('Todas as categorias'),
+                                      ),
+                                      ...categories.map(
+                                        (category) => DropdownMenuItem(
+                                          value: category,
+                                          child: Text(category),
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      if (value != null) {
+                                        setState(() => _categoryFilter = value);
+                                      }
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => _categoryFilter = value);
-                              }
-                            },
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final totalCard = _SummaryCard(
-                    title: 'Total • $periodLabel',
-                    value: ExpenseEntry.formatMoney(total),
-                  );
-                  final countCard = _SummaryCard(
-                    title: 'Registros exibidos',
-                    value: visibleEntries.length.toString(),
-                  );
-                  if (constraints.maxWidth < 600) {
-                    return Column(
-                      children: [
-                        totalCard,
-                        const SizedBox(height: 12),
-                        countCard,
-                      ],
-                    );
-                  }
-                  return Row(
-                    children: [
-                      Expanded(child: totalCard),
-                      const SizedBox(width: 12),
-                      Expanded(child: countCard),
-                    ],
-                  );
-                },
-              ),
-              if (sortedGroups.isNotEmpty) ...[
-                const SizedBox(height: 20),
-                Text(
-                  'Soma dos gastos por estado que você descreveu',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Descrição dos seus registros; não indica causa, diagnóstico '
-                  'ou relação clínica.',
-                ),
-                const SizedBox(height: 8),
-                ...sortedGroups.map((group) {
-                  final groupTotal = group.value.fold<int>(
-                    0,
-                    (sum, entry) => sum + entry.amountCents,
-                  );
-                  return Card(
-                    child: ListTile(
-                      title: Text(group.key),
-                      subtitle: Text(
-                        '${group.value.length} '
-                        '${group.value.length == 1 ? 'registro' : 'registros'}',
-                      ),
-                      trailing: Text(ExpenseEntry.formatMoney(groupTotal)),
+                    const SizedBox(height: 12),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final totalCard = _SummaryCard(
+                          title: 'Total • $periodLabel',
+                          value: ExpenseEntry.formatMoney(total),
+                        );
+                        final countCard = _SummaryCard(
+                          title: 'Registros exibidos',
+                          value: visibleEntries.length.toString(),
+                        );
+                        if (constraints.maxWidth < 600) {
+                          return Column(
+                            children: [
+                              totalCard,
+                              const SizedBox(height: 12),
+                              countCard,
+                            ],
+                          );
+                        }
+                        return Row(
+                          children: [
+                            Expanded(child: totalCard),
+                            const SizedBox(width: 12),
+                            Expanded(child: countCard),
+                          ],
+                        );
+                      },
                     ),
-                  );
-                }),
-              ],
-              const SizedBox(height: 20),
-              Text(
-                'Seus gastos',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              if (_saving)
-                const LinearProgressIndicator()
-              else if (visibleEntries.isEmpty)
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _entries.isEmpty
-                              ? 'Seu diário está vazio. Toque em “Registrar gasto” para anotar uma compra.'
-                              : 'Nenhum registro corresponde a estes filtros.',
-                        ),
-                        if (_entries.isEmpty) ...[
-                          const SizedBox(height: 4),
-                          const Text('As perguntas de reflexão são opcionais.'),
-                        ] else ...[
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: () => setState(() {
-                              _periodFilter = 'all';
-                              _categoryFilter = '__all__';
-                            }),
-                            child: const Text('Limpar filtros'),
+                    if (_selectedDestination == 1 &&
+                        sortedGroups.isNotEmpty) ...[
+                      const SizedBox(height: 20),
+                      Text(
+                        'Soma dos gastos por estado que você descreveu',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Descrição dos seus registros; não indica causa, diagnóstico '
+                        'ou relação clínica.',
+                      ),
+                      const SizedBox(height: 8),
+                      ...sortedGroups.map((group) {
+                        final groupTotal = group.value.fold<int>(
+                          0,
+                          (sum, entry) => sum + entry.amountCents,
+                        );
+                        return Card(
+                          child: ListTile(
+                            title: Text(group.key),
+                            subtitle: Text(
+                              '${group.value.length} '
+                              '${group.value.length == 1 ? 'registro' : 'registros'}',
+                            ),
+                            trailing: Text(
+                              ExpenseEntry.formatMoney(groupTotal),
+                            ),
                           ),
-                        ],
-                      ],
+                        );
+                      }),
+                    ],
+                    const SizedBox(height: 20),
+                    Text(
+                      _selectedDestination == 0
+                          ? 'Registros recentes'
+                          : 'Seus gastos',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                  ),
-                )
-              else
-                ...visibleEntries.map(
-                  (entry) => Card(
-                    child: ListTile(
-                      leading: Icon(
-                        entry.planned
-                            ? Icons.event_available_outlined
-                            : Icons.event_busy_outlined,
+                    if (_saving)
+                      const LinearProgressIndicator()
+                    else if (visibleEntries.isEmpty)
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _entries.isEmpty
+                                    ? 'Seu diário está vazio. Toque em “Registrar gasto” para anotar uma compra.'
+                                    : 'Nenhum registro corresponde a estes filtros.',
+                              ),
+                              if (_entries.isEmpty) ...[
+                                const SizedBox(height: 4),
+                                const Text(
+                                  'As perguntas de reflexão são opcionais.',
+                                ),
+                              ] else ...[
+                                const SizedBox(height: 8),
+                                TextButton(
+                                  onPressed: () => setState(() {
+                                    _periodFilter = 'all';
+                                    _categoryFilter = '__all__';
+                                  }),
+                                  child: const Text('Limpar filtros'),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      )
+                    else
+                      ...(_selectedDestination == 0
+                              ? visibleEntries.take(3)
+                              : visibleEntries)
+                          .map(
+                            (entry) => Card(
+                              child: ListTile(
+                                leading: Icon(
+                                  entry.planned
+                                      ? Icons.event_available_outlined
+                                      : Icons.event_busy_outlined,
+                                ),
+                                title: Text(
+                                  '${entry.category} • '
+                                  '${ExpenseEntry.formatMoney(entry.amountCents)}',
+                                ),
+                                subtitle: Text(_entrySummary(entry)),
+                                isThreeLine: _entrySummary(
+                                  entry,
+                                ).contains('\n'),
+                                onTap: () => _editEntry(entry),
+                                trailing: PopupMenuButton<String>(
+                                  tooltip: 'Ações do registro',
+                                  onSelected: (action) {
+                                    if (action == 'edit') _editEntry(entry);
+                                    if (action == 'delete') _deleteEntry(entry);
+                                  },
+                                  itemBuilder: (_) => const [
+                                    PopupMenuItem(
+                                      value: 'edit',
+                                      child: Text('Editar'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Apagar'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                    const SizedBox(height: 12),
+                    if (_selectedDestination == 0 && visibleEntries.length > 3)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton.icon(
+                          onPressed: () =>
+                              setState(() => _selectedDestination = 1),
+                          icon: const Icon(Icons.receipt_long_outlined),
+                          label: const Text('Ver todos os registros'),
+                        ),
                       ),
-                      title: Text(
-                        '${entry.category} • '
-                        '${ExpenseEntry.formatMoney(entry.amountCents)}',
-                      ),
-                      subtitle: Text(_entrySummary(entry)),
-                      isThreeLine: _entrySummary(entry).contains('\n'),
-                      onTap: () => _editEntry(entry),
-                      trailing: PopupMenuButton<String>(
-                        tooltip: 'Ações do registro',
-                        onSelected: (action) {
-                          if (action == 'edit') _editEntry(entry);
-                          if (action == 'delete') _deleteEntry(entry);
-                        },
-                        itemBuilder: (_) => const [
-                          PopupMenuItem(value: 'edit', child: Text('Editar')),
-                          PopupMenuItem(value: 'delete', child: Text('Apagar')),
-                        ],
-                      ),
+                    const Text(
+                      'Privacidade: o diário é cifrado com sua senha e fica no '
+                      'armazenamento local deste navegador ou dispositivo. Não há '
+                      'sincronização. A cópia exportada é texto legível; proteja-a.',
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Bipolaris não oferece diagnóstico, tratamento, detecção de '
+                      'crises nem aconselhamento financeiro ou clínico.',
+                    ),
+                  ],
                 ),
-              const SizedBox(height: 12),
-              const Text(
-                'Privacidade: o diário é cifrado com sua senha e fica no '
-                'armazenamento local deste navegador ou dispositivo. Não há '
-                'sincronização. A cópia exportada é texto legível; proteja-a.',
               ),
-              const SizedBox(height: 8),
-              const Text(
-                'Bipolaris não oferece diagnóstico, tratamento, detecção de '
-                'crises nem aconselhamento financeiro ou clínico.',
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

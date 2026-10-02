@@ -110,6 +110,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('R\$ 40,00'), findsOneWidget);
+    await tester.tap(find.text('Registros'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('30 dias'));
     await tester.pumpAndSettle();
@@ -132,6 +134,11 @@ void main() {
   testWidgets('reflection form offers optional self-report choices', (
     tester,
   ) async {
+    tester.view.physicalSize = const Size(800, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final session = _FakeSession();
     await tester.pumpWidget(
       MaterialApp(
@@ -145,10 +152,12 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    expect(find.byType(NavigationRail), findsOneWidget);
 
     await tester.tap(find.text('Registrar gasto'));
     await tester.pumpAndSettle();
 
+    expect(find.byType(Dialog), findsOneWidget);
     expect(find.text('Como você se sentia? (opcional)'), findsOneWidget);
     expect(find.text('O que motivou a compra? (opcional)'), findsOneWidget);
     expect(find.text('Animado(a)'), findsOneWidget);
@@ -161,6 +170,36 @@ void main() {
     await tester.tap(choice);
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
+  });
+
+  testWidgets('navigation adapts between mobile bar and wide rail', (
+    tester,
+  ) async {
+    final session = _FakeSession();
+
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BipolarisTheme.light(),
+        home: JournalPage(
+          session: session,
+          initialEntries: const [],
+          onLock: () {},
+          onOpenPrivacy: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byType(NavigationRail), findsNothing);
+    expect(find.text('Registros recentes'), findsOneWidget);
+
+    tester.view.physicalSize = const Size(1024, 900);
+    await tester.pumpAndSettle();
+    expect(find.byType(NavigationRail), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('privacy and use guide is available before creating the vault', (
