@@ -21,6 +21,8 @@ jobs:
       - run: flutter --version
       - run: flutter create . --platforms web,android --project-name bipolaris
       - run: flutter pub get
+      - name: Temporary formatter output
+        run: dart format --output=show lib/main.dart test/widget_test.dart | sed -n '1,120p'
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
