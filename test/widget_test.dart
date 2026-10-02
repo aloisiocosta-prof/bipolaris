@@ -122,6 +122,56 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
   });
+
+  testWidgets('summary cards stack on narrow screens and fit large totals', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    final session = _FakeSession();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BipolarisTheme.light(),
+        home: JournalPage(
+          session: session,
+          initialEntries: [
+            ExpenseEntry(
+              id: 'large-total',
+              amountCents: 123456789,
+              purchasedAt: DateTime.now(),
+              category: 'Outro',
+              planned: true,
+            ),
+          ],
+          onLock: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final totalCard = find
+        .ancestor(
+          of: find.text('Total • todo o período'),
+          matching: find.byType(Card),
+        )
+        .first;
+    final countCard = find
+        .ancestor(
+          of: find.text('Registros exibidos'),
+          matching: find.byType(Card),
+        )
+        .first;
+
+    expect(
+      tester.getTopLeft(countCard).dy,
+      greaterThan(tester.getBottomLeft(totalCard).dy),
+    );
+    expect(find.text('R\$ 1.234.567,89'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _FakeSession implements ExpenseVaultSession {

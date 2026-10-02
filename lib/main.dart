@@ -554,22 +554,33 @@ class _JournalPageState extends State<JournalPage> {
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _SummaryCard(
-                      title: 'Total • $periodLabel',
-                      value: ExpenseEntry.formatMoney(total),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _SummaryCard(
-                      title: 'Registros exibidos',
-                      value: visibleEntries.length.toString(),
-                    ),
-                  ),
-                ],
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final totalCard = _SummaryCard(
+                    title: 'Total • $periodLabel',
+                    value: ExpenseEntry.formatMoney(total),
+                  );
+                  final countCard = _SummaryCard(
+                    title: 'Registros exibidos',
+                    value: visibleEntries.length.toString(),
+                  );
+                  if (constraints.maxWidth < 600) {
+                    return Column(
+                      children: [
+                        totalCard,
+                        const SizedBox(height: 12),
+                        countCard,
+                      ],
+                    );
+                  }
+                  return Row(
+                    children: [
+                      Expanded(child: totalCard),
+                      const SizedBox(width: 12),
+                      Expanded(child: countCard),
+                    ],
+                  );
+                },
               ),
               if (sortedGroups.isNotEmpty) ...[
                 const SizedBox(height: 20),

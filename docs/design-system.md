@@ -38,6 +38,7 @@ Período e categoria afetam conjuntamente a lista, o total e o agrupamento por e
 
 - Usar alvos de toque de pelo menos 48 × 48 dp nos controles interativos e checar contraste do texto; validar também navegação por teclado/leitor de tela e escala ampliada.
 - Manter os chips em quebra automática e o formulário rolável para telas estreitas e teclado aberto.
+- Empilhar cartões de resumo quando a largura disponível for menor que 600 dp; em larguras maiores, exibi-los lado a lado. Esse limite é uma decisão do projeto: em telas estreitas, cada resumo ganha a largura necessária para leitura. O teste de widget valida o empilhamento e um valor longo.
 - Usar rótulos de campo, texto auxiliar e tooltips; cor sozinha não comunica estado.
 - Conferir semântica Web em widgets personalizados e fazer teste manual nos leitores de tela suportados antes de alegar conformidade.
 
@@ -49,6 +50,7 @@ Esses valores seguem recomendações de implementação do Flutter e são crité
 - [ ] Pular estado/motivação é válido; opções rápidas e texto livre funcionam.
 - [ ] Alterar período ou categoria atualiza lista, total, contagem e agrupamentos de forma coerente.
 - [ ] Excluir e persistir continuam funcionando com o cofre cifrado.
+- [ ] Em largura disponível abaixo de 600 dp, os cartões de resumo ficam empilhados e valores longos permanecem visíveis.
 - [ ] Interface continua rolável em janela estreita e com teclado virtual aberto.
 - [ ] Nenhum rótulo sugere diagnóstico, causalidade ou aconselhamento.
 - [ ] Verificar contraste, alvos de toque, semântica e escala com ferramentas do Flutter e revisão manual.
@@ -58,6 +60,11 @@ Esses valores seguem recomendações de implementação do Flutter e são crité
 A revisão exploratória de Vial, Boudhraâ e Dumont descreve a necessidade de relatar melhor o envolvimento de usuários no desenho de intervenções digitais de saúde mental; ela informa a escolha de documentar fluxos e critérios, mas não avalia Bipolaris. O estudo de desenvolvimento centrado em usuários de um rastreador de humor e ciclo menstrual reporta necessidades específicas do grupo estudado; suas conclusões não são generalizadas aqui para pessoas com transtorno bipolar ou para gastos financeiros. A listagem e comentários de loja do Clue serviram apenas como referência exploratória de interface. Não foram coletados dados de participantes para este trabalho.
 
 ## Referências
+
+- Material Design 3. Foundations. https://m3.material.io/foundations/
+- Flutter. Use themes to share colors and font styles. https://docs.flutter.dev/cookbook/design/themes
+- Flutter. Adaptive and responsive design. https://docs.flutter.dev/ui/adaptive-responsive
+- W3C. Web Content Accessibility Guidelines (WCAG) 2.2. https://www.w3.org/TR/WCAG22/
 
 - Vial S, Boudhraâ S, Dumont M. Human-Centered Design Approaches in Digital Mental Health Interventions: Exploratory Mapping Review. *JMIR Mental Health*. 2022;9(6):e35591. https://doi.org/10.2196/35591
 - Developing a Mood and Menstrual Tracking App for People With Premenstrual Dysphoric Disorder: User-Centered Design Study. *JMIR Formative Research*. 2024;8:e59333. https://formative.jmir.org/2024/1/e59333/
