@@ -137,7 +137,10 @@ void main() {
 
     expect(find.byType(PrivacyAndUsePage), findsOneWidget);
     expect(find.text('Que dados ficam salvos e onde?'), findsOneWidget);
-    expect(find.textContaining('não é uma declaração de conformidade'), findsOneWidget);
+    expect(
+      find.textContaining('não é uma declaração de conformidade'),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 
