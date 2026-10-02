@@ -281,7 +281,10 @@ class _VaultGateState extends State<VaultGate> {
               ),
               const SizedBox(height: 12),
               OutlinedButton.icon(
-                onPressed: () => Router.navigate(context, widget.onOpenPrivacy),
+                onPressed: () => Router.navigate(
+                  context,
+                  widget.onOpenPrivacy,
+                ),
                 icon: const Icon(Icons.privacy_tip_outlined),
                 label: const Text('Privacidade e uso'),
               ),
@@ -561,7 +564,9 @@ class _JournalPageState extends State<JournalPage> {
             onSelected: (value) {
               if (value == 'delete') _deleteAll();
               if (value == 'lock') widget.onLock();
-              if (value == 'privacy') Router.navigate(context, widget.onOpenPrivacy);
+              if (value == 'privacy') {
+                Router.navigate(context, widget.onOpenPrivacy);
+              }
             },
             itemBuilder: (_) => const [
               PopupMenuItem(
