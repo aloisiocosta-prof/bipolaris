@@ -75,8 +75,11 @@ class BipolarisRouteInformationParser
   );
 }
 
-class BipolarisRouterDelegate extends RouterDelegate<BipolarisRouteConfiguration>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<BipolarisRouteConfiguration> {
+class BipolarisRouterDelegate
+    extends RouterDelegate<BipolarisRouteConfiguration>
+    with
+        ChangeNotifier,
+        PopNavigatorRouterDelegateMixin<BipolarisRouteConfiguration> {
   BipolarisRouterDelegate({this.vault});
 
   final ExpenseVault? vault;
@@ -132,11 +135,7 @@ class BipolarisRouterDelegate extends RouterDelegate<BipolarisRouteConfiguration
 }
 
 class VaultGate extends StatefulWidget {
-  const VaultGate({
-    required this.onOpenPrivacy,
-    super.key,
-    this.vault,
-  });
+  const VaultGate({required this.onOpenPrivacy, super.key, this.vault});
 
   final ExpenseVault? vault;
   final VoidCallback onOpenPrivacy;
