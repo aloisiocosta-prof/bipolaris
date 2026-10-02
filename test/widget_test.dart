@@ -138,7 +138,11 @@ void main() {
     expect(find.byType(PrivacyAndUsePage), findsOneWidget);
     expect(find.text('Que dados ficam salvos e onde?'), findsOneWidget);
 
-    await tester.drag(find.byType(ListView), const Offset(0, -1400));
+    final guideList = find.descendant(
+      of: find.byType(PrivacyAndUsePage),
+      matching: find.byType(ListView),
+    );
+    await tester.drag(guideList, const Offset(0, -1400));
     await tester.pumpAndSettle();
     expect(
       find.textContaining('não é uma declaração de conformidade'),
