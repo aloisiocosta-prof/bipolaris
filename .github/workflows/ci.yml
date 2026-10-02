@@ -21,8 +21,6 @@ jobs:
       - run: flutter --version
       - run: flutter create . --platforms web,android --project-name bipolaris
       - run: flutter pub get
-      - name: Temporary Dart formatter inspection
-        run: dart format --output=show lib/main.dart | sed -n '1,150p'
       - run: dart format --output=none --set-exit-if-changed .
       - run: flutter analyze
       - run: flutter test
