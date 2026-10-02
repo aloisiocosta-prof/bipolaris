@@ -28,6 +28,23 @@ void main() {
     expect(parser.restoreRouteInformation(hashRoute).uri.path, '/privacy');
   });
 
+  testWidgets('privacy route supports browser back navigation', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      BipolarisApp(vault: ExpenseVault(storage: MemoryStringStore())),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Privacidade e uso'));
+    await tester.pumpAndSettle();
+    expect(find.text('Informações claras, quando você precisar'), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    expect(find.text('Crie seu diário protegido'), findsOneWidget);
+  });
+
   testWidgets('offers to create a private expense reflection journal', (
     tester,
   ) async {
