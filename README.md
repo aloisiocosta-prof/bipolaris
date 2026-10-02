@@ -22,6 +22,8 @@ A exportação JSON é **texto sem cifra**; armazene-a em local privado. A persi
 
 Este MVP não foi validado clinicamente, não declara conformidade LGPD e não é dispositivo médico. A LGPD define dados de saúde como sensíveis; qualquer uso institucional ou pesquisa com participantes exige avaliação de privacidade, segurança, base legal, informação aos titulares e determinação ética aplicável. Não versionar dados de usuários, mesmo cifrados, no repositório, CI, issues, capturas de tela ou releases.
 
+O aviso legível “Privacidade e uso” fica acessível antes de criar o diário e pode ser reaberto no menu. Ele explica dados locais, cifra, exportação sem cifra, opções de exclusão e limites do MVP; descreve a versão atual e não declara conformidade jurídica com a LGPD. Veja também [docs/design-system.md](docs/design-system.md).
+
 ## Executar
 
 Com Flutter 3.47.5 e Dart 3.9 ou superior:

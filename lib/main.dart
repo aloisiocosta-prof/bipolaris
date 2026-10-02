@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'models/expense_entry.dart';
 import 'services/expense_vault.dart';
 import 'theme/bipolaris_theme.dart';
+import 'privacy_and_use_page.dart';
 
 void main() => runApp(const BipolarisApp());
 
@@ -162,6 +163,16 @@ class _VaultGateState extends State<VaultGate> {
                 'dados salvos, mas não protege um dispositivo desbloqueado ou '
                 'uma página comprometida.',
                 textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PrivacyAndUsePage(),
+                  ),
+                ),
+                icon: const Icon(Icons.privacy_tip_outlined),
+                label: const Text('Privacidade e uso'),
               ),
               const SizedBox(height: 24),
               TextField(
@@ -437,8 +448,22 @@ class _JournalPageState extends State<JournalPage> {
             onSelected: (value) {
               if (value == 'delete') _deleteAll();
               if (value == 'lock') widget.onLock();
+              if (value == 'privacy') {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => const PrivacyAndUsePage(),
+                  ),
+                );
+              }
             },
             itemBuilder: (_) => const [
+              PopupMenuItem(
+                value: 'privacy',
+                child: ListTile(
+                  leading: Icon(Icons.privacy_tip_outlined),
+                  title: Text('Privacidade e uso'),
+                ),
+              ),
               PopupMenuItem(
                 value: 'delete',
                 child: ListTile(

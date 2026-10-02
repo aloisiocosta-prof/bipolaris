@@ -1,5 +1,6 @@
 import 'package:bipolaris/main.dart';
 import 'package:bipolaris/models/expense_entry.dart';
+import 'package:bipolaris/privacy_and_use_page.dart';
 import 'package:bipolaris/services/expense_vault.dart';
 import 'package:bipolaris/theme/bipolaris_theme.dart';
 import 'package:flutter/material.dart';
@@ -121,6 +122,52 @@ void main() {
     await tester.tap(choice);
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
+  });
+
+  testWidgets('privacy and use guide is available before creating the vault', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      BipolarisApp(vault: ExpenseVault(storage: MemoryStringStore())),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Privacidade e uso'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PrivacyAndUsePage), findsOneWidget);
+    expect(find.text('Que dados ficam salvos e onde?'), findsOneWidget);
+
+    expect(
+      find.text('Informações claras, quando você precisar'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('privacy and use guide can be reopened from journal options', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: BipolarisTheme.light(),
+        home: JournalPage(
+          session: _FakeSession(),
+          initialEntries: const [],
+          onLock: () {},
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Opções do diário'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Privacidade e uso'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(PrivacyAndUsePage), findsOneWidget);
+    expect(find.text('Como usar o diário'), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('summary cards stack on narrow screens and fit large totals', (
