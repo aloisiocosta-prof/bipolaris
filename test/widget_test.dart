@@ -25,10 +25,7 @@ void main() {
     expect(hashRoute.showPrivacy, isTrue);
     expect(pathRoute.showPrivacy, isTrue);
     expect(rootRoute.showPrivacy, isFalse);
-    expect(
-      parser.restoreRouteInformation(hashRoute)?.uri.path,
-      '/privacy',
-    );
+    expect(parser.restoreRouteInformation(hashRoute)?.uri.path, '/privacy');
   });
 
   testWidgets('offers to create a private expense reflection journal', (
