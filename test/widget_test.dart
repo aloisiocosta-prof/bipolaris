@@ -122,8 +122,6 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.widget<ChoiceChip>(choice).selected, isTrue);
   });
-}
-
   testWidgets('summary cards stack on narrow screens and fit large totals', (
     tester,
   ) async {
@@ -166,10 +164,15 @@ void main() {
         )
         .first;
 
-    expect(tester.getTopLeft(countCard).dy, greaterThan(tester.getBottomLeft(totalCard).dy));
-    expect(find.text('R\\$ 1.234.567,89'), findsOneWidget);
+    expect(
+      tester.getTopLeft(countCard).dy,
+      greaterThan(tester.getBottomLeft(totalCard).dy),
+    );
+    expect(find.text('R\$ 1.234.567,89'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+}
+
 
 class _FakeSession implements ExpenseVaultSession {
   @override
