@@ -28,9 +28,7 @@ void main() {
     expect(parser.restoreRouteInformation(hashRoute).uri.path, '/privacy');
   });
 
-  testWidgets('privacy route supports browser back navigation', (
-    tester,
-  ) async {
+  testWidgets('privacy route supports browser back navigation', (tester) async {
     await tester.pumpWidget(
       BipolarisApp(vault: ExpenseVault(storage: MemoryStringStore())),
     );
